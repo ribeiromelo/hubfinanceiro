@@ -1,0 +1,13 @@
+-- Seed data para desenvolvimento/testes
+-- Este arquivo pode ser usado para popular o banco com dados de exemplo
+
+-- Exemplo de categorias padrão (será criado via API após registro)
+-- INSERT INTO categories (user_id, name, budget_limit, icon) VALUES 
+--   (1, 'Alimentação', 1200, '🍔'),
+--   (1, 'Mercado', 1500, '🛒'),
+--   (1, 'Transporte', 600, '🚗'),
+--   (1, 'Saúde', 500, '💊'),
+--   (1, 'Lazer', 400, '🎮'),
+--   (1, 'Educação', 800, '📚'),
+--   (1, 'Moradia', 2500, '🏠'),
+--   (1, 'Assinaturas', 150, '📺');
