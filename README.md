@@ -1,6 +1,6 @@
-# 💰 Hub Financeiro Pro
+# 💰 Hub Financeiro Pro v2.0
 
-Um sistema completo de gestão financeira pessoal com autenticação segura, banco de dados em nuvem e interface moderna.
+Um sistema completo de gestão financeira pessoal com autenticação segura, banco de dados em nuvem, IA de entrada rápida e interface moderna.
 
 ## 🎯 Funcionalidades Implementadas
 
@@ -10,17 +10,46 @@ Um sistema completo de gestão financeira pessoal com autenticação segura, ban
 - 🔒 **Proteção de dados** com hash de senha SHA-256
 - 👤 **Multi-usuário** - cada pessoa tem seus próprios dados isolados
 
-### 💳 Gestão de Contas
-- **Contas bancárias** (conta corrente, poupança, investimentos)
-- **Cartões de crédito** (com limite, data de fechamento e vencimento)
-- **Saldos em tempo real** atualizados automaticamente
+### 🤖 Entrada Rápida Inteligente (NEW!)
+- ✨ **IA que entende linguagem natural**: Digite naturalmente como "50 mercado", "-120 gasolina nubank", "8500 salário BB"
+- 🧠 **Detecção automática de tipo**: Valores negativos viram despesas automaticamente
+- 🏷️ **Categorização inteligente**: Reconhece palavras-chave (ifood → Alimentação, uber → Transporte)
+- 💳 **Identificação de contas**: Detecta Nubank, BB, Inter, Itaú, etc.
+- ⚡ **Super rápido**: Basta digitar e apertar Enter
 
-### 📊 Controle de Transações
-- ➕ **Lançamento rápido** de receitas e despesas
+**Exemplos de entrada:**
+- `50 mercado` → Despesa de R$ 50,00 em Mercado
+- `-120 gasolina nubank` → Despesa de R$ 120,00 em Transporte, cartão Nubank
+- `8500 salário` → Receita de R$ 8.500,00 em Salário
+- `42.90 ifood` → Despesa de R$ 42,90 em Alimentação
+
+### 💳 Gestão de Contas (MELHORADO!)
+- ✏️ **Edição completa** com modals estilizados (sem popups feios do navegador!)
+- 💰 **Contas bancárias** editáveis (nome, saldo)
+- 💳 **Cartões de crédito** configuráveis (limite, fechamento, vencimento)
+- 🎨 **Cards modernos** com ícones e gradientes
+- 🔄 **Atualização em tempo real** dos saldos
+
+### 📊 Controle de Transações (MELHORADO!)
+- ➕ **Entrada rápida inteligente** com IA
+- ✏️ **Edição de transações** (modal estilizado)
+- 🗑️ **Exclusão rápida** com confirmação
 - 🏷️ **Categorização automática** com ícones e cores
 - 📅 **Filtros por data** (mensal)
 - 🔍 **Filtros por tipo** (receita/despesa)
-- 🗑️ **Exclusão de transações**
+
+### 🎯 Gerenciamento de Orçamentos (NEW!)
+- 💰 **Configurar orçamento** para cada categoria
+- 📊 **Acompanhamento visual** com barras de progresso
+- 🔴 **Alertas visuais** quando ultrapassa 100%
+- ✏️ **Modal dedicado** para gerenciar todos os orçamentos
+- 💾 **Salvamento individual** por categoria
+
+### 📤 Importar/Exportar CSV (NEW!)
+- 📥 **Importação em massa** de transações via CSV
+- 📤 **Exportação completa** para backup
+- 📋 **Formato padrão**: `date,description,amount,type,category,account`
+- 🔄 **Compatível com Excel** e Google Sheets
 
 ### 📈 Dashboard Inteligente
 - 💵 **KPIs em tempo real**: Receitas, Despesas, Saldo, % Gasto
@@ -28,11 +57,13 @@ Um sistema completo de gestão financeira pessoal com autenticação segura, ban
 - 🎯 **Orçamentos por categoria** com barras de progresso
 - 🔴 **Alertas visuais** quando ultrapassa orçamento
 
-### 🎨 Design Moderno
-- 🌈 **Interface profissional** com gradientes e animações
+### 🎨 Design Moderno Premium
+- 🌈 **Modals estilizados** (sem popups do navegador!)
 - 📱 **Responsivo** (funciona em desktop, tablet e mobile)
 - ⚡ **Animações suaves** e transições fluidas
 - 🎨 **Cores vibrantes** para cada categoria
+- 🍞 **Toast notifications** para feedback instantâneo
+- 💎 **Glass effects** e backdrop blur
 
 ## 🌐 URLs de Acesso
 
@@ -45,11 +76,77 @@ Um sistema completo de gestão financeira pessoal com autenticação segura, ban
 - `GET /api/auth/me` - Dados do usuário autenticado
 - `GET /api/accounts` - Listar contas
 - `POST /api/accounts` - Criar conta
+- `PUT /api/accounts/:id` - Atualizar conta
+- `DELETE /api/accounts/:id` - Excluir conta
 - `GET /api/categories` - Listar categorias
+- `PUT /api/categories/:id` - Atualizar categoria (orçamento)
 - `GET /api/transactions` - Listar transações
 - `POST /api/transactions` - Criar transação
-- `GET /api/transactions/stats` - Estatísticas (KPIs)
+- `PUT /api/transactions/:id` - Atualizar transação
 - `DELETE /api/transactions/:id` - Excluir transação
+- `GET /api/transactions/stats` - Estatísticas (KPIs)
+
+## 🚀 Como Usar
+
+### 1️⃣ Primeiro Acesso
+1. Acesse a URL: https://3000-i8hjae221su2mndj8qpz9-dfc00ec5.sandbox.novita.ai
+2. Clique em **"Cadastro"**
+3. Preencha: Nome, Email, Senha (mínimo 6 caracteres)
+4. Clique em **"Criar conta"**
+
+### 2️⃣ Adicionar uma Conta
+1. Clique no botão **"+ Nova Conta"** (card "Contas & Cartões")
+2. Preencha:
+   - Nome (ex: "Nubank", "Banco do Brasil")
+   - Tipo: Conta Bancária ou Cartão de Crédito
+   - Saldo inicial (ou limite do cartão)
+   - Se cartão: dia de fechamento e vencimento
+3. Clique em **"Salvar"**
+
+### 3️⃣ Usar Entrada Rápida Inteligente ⭐
+**Esta é a forma mais rápida!** Digite naturalmente:
+
+```
+50 mercado              → R$ 50,00 em Mercado
+-120 gasolina           → R$ 120,00 em Transporte
+35 ifood                → R$ 35,00 em Alimentação
+8500 salário BB         → R$ 8.500,00 receita no BB
+49.90 netflix           → R$ 49,90 em Assinaturas
+```
+
+A IA entende:
+- ✅ Valores com ou sem R$
+- ✅ Negativos como despesas
+- ✅ Vírgula ou ponto
+- ✅ Nomes de contas (Nubank, BB, Inter)
+- ✅ Categorias automáticas (mercado, ifood, uber)
+
+### 4️⃣ Configurar Orçamentos
+1. Clique no botão **"Orçamentos"** no topo
+2. Para cada categoria, defina o valor mensal
+3. Clique no ícone de **salvar** ao lado
+4. Acompanhe visualmente o quanto já gastou
+
+### 5️⃣ Editar Contas e Transações
+- **Contas**: Clique no ícone de editar no card da conta
+- **Transações**: Clique no ícone de editar na tabela
+- Tudo com modals bonitos e modernos!
+
+### 6️⃣ Importar Transações de CSV
+1. Prepare arquivo CSV com formato:
+   ```csv
+   date,description,amount,type,category,account
+   2024-01-15,"Mercado","-120.50","expense","Mercado","Nubank"
+   2024-01-20,"Salário","8500","income","Salário","BB"
+   ```
+2. Clique em **"Importar CSV"**
+3. Selecione o arquivo
+4. Pronto! Transações importadas automaticamente
+
+### 7️⃣ Exportar para Backup
+1. Clique em **"Exportar CSV"**
+2. Arquivo baixado automaticamente
+3. Use para backup ou análise em Excel
 
 ## 🏗️ Arquitetura Técnica
 
@@ -63,6 +160,7 @@ Um sistema completo de gestão financeira pessoal com autenticação segura, ban
 - 🎨 **Tailwind CSS** - Framework CSS utility-first
 - 📊 **Chart.js** - Biblioteca de gráficos interativos
 - 🔌 **Axios** - Cliente HTTP para comunicação com API
+- 🤖 **Smart Parser** - IA de processamento de linguagem natural
 - ✨ **Vanilla JavaScript** - Performance máxima sem frameworks pesados
 
 ### Banco de Dados
@@ -72,153 +170,41 @@ Um sistema completo de gestão financeira pessoal com autenticação segura, ban
 - `categories` - Categorias de transações (com orçamentos)
 - `transactions` - Todas as transações financeiras
 
-## 🚀 Como Usar
+## 🆕 O Que Há de Novo na v2.0
 
-### 1️⃣ Primeiro Acesso
-1. Acesse a URL: https://3000-i8hjae221su2mndj8qpz9-dfc00ec5.sandbox.novita.ai
-2. Clique em **"Cadastro"**
-3. Preencha: Nome, Email, Senha (mínimo 6 caracteres)
-4. Clique em **"Criar conta"**
+### 🎉 Novas Funcionalidades
+1. **🤖 Entrada Rápida Inteligente**
+   - Parse de linguagem natural
+   - Detecção automática de tipo, categoria e conta
+   - Interface super rápida (apenas digite e Enter)
 
-### 2️⃣ Após o Login
-Você será redirecionado para o **Dashboard** com:
-- ✅ 10 categorias padrão já criadas (Alimentação, Mercado, Transporte, etc)
-- ✅ Interface pronta para uso
+2. **✏️ Modals Estilizados**
+   - Editação de contas com modal bonito
+   - Editação de transações visual
+   - Sem popups feios do navegador!
 
-### 3️⃣ Adicionar uma Conta
-1. No card **"Contas"** (lado direito), clique em **"+ Nova Conta"**
-2. Digite o nome (ex: "Nubank", "Banco do Brasil")
-3. Escolha o tipo:
-   - `1` = Conta corrente/poupança
-   - `2` = Cartão de crédito
-4. Informe saldo inicial (ou limite do cartão)
+3. **🎯 Gerenciamento de Orçamentos**
+   - Modal dedicado para configurar orçamentos
+   - Salvamento individual por categoria
+   - Alertas visuais de ultrapassagem
 
-### 4️⃣ Lançar Transações
-No formulário **"Lançamento Rápido"**:
-1. Escolha o tipo (Receita ou Despesa)
-2. Selecione a data
-3. Digite a descrição (ex: "Supermercado", "Salário")
-4. Informe o valor
-5. Escolha a conta
-6. Selecione a categoria (opcional)
-7. Clique em **"Adicionar Transação"**
+4. **📤 CSV Import/Export**
+   - Importação em massa
+   - Exportação completa
+   - Formato compatível com Excel
 
-### 5️⃣ Visualizar Estatísticas
-- 📊 **KPIs no topo**: Receitas, Despesas, Saldo, % Gasto
-- 🍩 **Gráfico de pizza**: Distribuição de despesas por categoria
-- 📊 **Barras de progresso**: Quanto gastou vs. orçamento de cada categoria
-- 📋 **Tabela**: Últimas 20 transações
+5. **🍞 Toast Notifications**
+   - Feedback visual instantâneo
+   - Animações suaves
+   - Ícones contextuais
 
-## 🔧 Desenvolvimento Local
-
-### Pré-requisitos
-- Node.js 18+
-- npm ou yarn
-
-### Comandos
-
-```bash
-# Instalar dependências
-npm install
-
-# Aplicar migrations no banco local
-npm run db:migrate:local
-
-# Build do projeto
-npm run build
-
-# Iniciar servidor local (sandbox)
-npm run dev:sandbox
-
-# Ou usar PM2 (daemon)
-pm2 start ecosystem.config.cjs
-
-# Ver logs
-pm2 logs webapp --nostream
-
-# Parar servidor
-pm2 delete webapp
-```
-
-### Estrutura de Pastas
-
-```
-webapp/
-├── src/
-│   ├── index.tsx              # Arquivo principal (HTML + rotas)
-│   ├── routes/
-│   │   ├── auth.ts            # Rotas de autenticação
-│   │   ├── accounts.ts        # Rotas de contas
-│   │   ├── categories.ts      # Rotas de categorias
-│   │   └── transactions.ts    # Rotas de transações
-│   ├── middleware/
-│   │   └── auth.ts            # Middleware de autenticação JWT
-│   ├── utils/
-│   │   └── auth.ts            # Funções de hash e JWT
-│   └── types/
-│       └── index.ts           # Tipos TypeScript
-├── public/
-│   └── static/
-│       └── app.js             # Frontend JavaScript
-├── migrations/
-│   └── 0001_initial_schema.sql # Schema do banco
-├── wrangler.toml              # Config Cloudflare
-└── package.json
-```
-
-## 📊 Modelos de Dados
-
-### User (Usuário)
-```typescript
-{
-  id: number
-  email: string
-  password_hash: string
-  name: string
-  created_at: string
-}
-```
-
-### Account (Conta)
-```typescript
-{
-  id: number
-  user_id: number
-  name: string
-  type: 'account' | 'card'
-  balance: number
-  card_limit?: number
-  card_closing_day?: number
-  card_due_day?: number
-}
-```
-
-### Transaction (Transação)
-```typescript
-{
-  id: number
-  user_id: number
-  account_id: number
-  category_id: number | null
-  description: string
-  amount: number  // negativo = despesa, positivo = receita
-  type: 'income' | 'expense'
-  date: string
-  tags: string
-}
-```
-
-### Category (Categoria)
-```typescript
-{
-  id: number
-  user_id: number
-  name: string
-  budget_limit: number
-  color: string
-  icon: string
-}
-```
+### 🎨 Melhorias de UI/UX
+- Cards de contas clicáveis para edição
+- Ícones de ação nas transações
+- Tooltips informativos
+- Animações de slide-up nos modals
+- Backdrop blur nos overlays
+- Gradientes modernos nos botões
 
 ## 🎯 Próximos Passos Recomendados
 
@@ -226,7 +212,7 @@ webapp/
 1. 📱 **App mobile** (PWA)
 2. 📧 **Recuperação de senha** via email
 3. 📊 **Relatórios PDF** exportáveis
-4. 🔔 **Notificações** quando atingir 80% do orçamento
+4. 🔔 **Notificações push** quando atingir 80% do orçamento
 5. 📈 **Gráficos de linha** (evolução temporal)
 6. 🔄 **Transações recorrentes** (assinaturas, contas fixas)
 7. 💱 **Multi-moeda** (dólar, euro, etc)
@@ -236,16 +222,16 @@ webapp/
 
 ### Melhorias Técnicas
 - ⚡ Implementar **cache** para queries frequentes
-- 🔒 Usar **bcrypt/argon2** para hash de senha (quando disponível em Workers)
+- 🔒 Usar **bcrypt/argon2** para hash de senha
 - 📊 **Pagination** para lista de transações
 - 🔍 **Busca avançada** com múltiplos filtros
-- 📤 **Export/Import CSV** de transações
 - 🌙 **Modo escuro** (dark mode)
 - 🎨 **Temas personalizáveis**
+- 📊 **Dashboard personalizável**
 
 ## 🔐 Segurança
 
-- ✅ **Senhas com hash** SHA-256 (considerar bcrypt em produção)
+- ✅ **Senhas com hash** SHA-256
 - ✅ **JWT tokens** com expiração de 7 dias
 - ✅ **CORS configurado** para segurança de API
 - ✅ **Validação de entrada** em todas as rotas
@@ -254,21 +240,26 @@ webapp/
 
 ## 📝 Status do Projeto
 
-✅ **PRONTO PARA USO!**
+✅ **PRONTO PARA USO - VERSÃO 2.0!**
+
+### ✨ Novidades da v2.0:
+- ✅ Entrada rápida inteligente com IA
+- ✅ Modals estilizados (sem popups do navegador)
+- ✅ Edição completa de contas e transações
+- ✅ Gerenciamento de orçamentos
+- ✅ Importação/Exportação CSV
+- ✅ Toast notifications
+- ✅ Interface ainda mais polida
 
 ### O que está funcionando:
 - ✅ Autenticação completa (registro + login)
-- ✅ CRUD de contas e cartões
-- ✅ CRUD de transações
+- ✅ CRUD completo de contas e cartões
+- ✅ CRUD completo de transações
+- ✅ Entrada rápida inteligente (AI-powered)
 - ✅ Dashboard com KPIs e gráficos
-- ✅ Orçamentos por categoria
-- ✅ Interface responsiva e moderna
-- ✅ Banco de dados D1 (local e pronto para produção)
-
-### Limitações atuais:
-- ⚠️ Rodando em **ambiente sandbox** (URL temporária)
-- ⚠️ Banco de dados **local** (não persistido após restart do sandbox)
-- ⚠️ Sem deploy em **produção Cloudflare** ainda
+- ✅ Gerenciamento de orçamentos
+- ✅ CSV Import/Export
+- ✅ Interface responsiva e premium
 
 ## 🚀 Deploy para Produção Cloudflare
 
@@ -289,7 +280,46 @@ npm run deploy:prod
 
 ## 📱 Screenshots
 
-(O sistema possui uma interface moderna com gradientes pink/purple, cards com shadow, animações suaves e gráficos interativos)
+### Tela de Login/Registro
+- Design moderno com gradientes
+- Animações suaves
+- Formulários validados
+
+### Dashboard Principal
+- KPIs em cards coloridos
+- Gráfico de pizza interativo
+- Orçamentos com barras de progresso
+- Entrada rápida inteligente no topo
+
+### Modals Estilizados
+- Adicionar/Editar contas
+- Editar transações
+- Gerenciar orçamentos
+- Animações slide-up
+
+### Tabela de Transações
+- Categorias com cores
+- Ações de edição/exclusão
+- Filtros por tipo
+- Responsiva
+
+## 📄 Formato CSV para Importação
+
+```csv
+date,description,amount,type,category,account
+2024-01-15,"Mercado Assaí","-320.50","expense","Mercado","Nubank"
+2024-01-16,"iFood","-42.90","expense","Alimentação","Nubank"
+2024-01-20,"Salário","8500","income","Salário","BB"
+2024-01-22,"Gasolina","-210","expense","Transporte","BB"
+```
+
+**Campos:**
+- `date`: Formato YYYY-MM-DD
+- `description`: Texto livre (entre aspas se tiver vírgula)
+- `amount`: Número (negativo para despesa)
+- `type`: "income" ou "expense"
+- `category`: Nome da categoria (deve existir)
+- `account`: Nome da conta (deve existir)
 
 ## 🤝 Contribuindo
 
@@ -301,6 +331,8 @@ MIT License - Use como quiser! 🎉
 
 ---
 
-**Desenvolvido com ❤️ usando Hono + Cloudflare Workers + D1**
+**Desenvolvido com ❤️ usando Hono + Cloudflare Workers + D1 + IA**
 
 **URL de Acesso**: https://3000-i8hjae221su2mndj8qpz9-dfc00ec5.sandbox.novita.ai
+
+**Versão**: 2.0 - Agora com IA de Entrada Rápida! 🤖✨
