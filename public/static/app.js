@@ -73,6 +73,71 @@ function showApp() {
 
 // ========== SMART QUICK INPUT PARSER ==========
 
+// Mapa expandido de palavras-chave para categorização automática
+const CATEGORY_KEYWORDS = {
+  'alimentação': [
+    'ifood', 'rappi', 'uber eats', 'delivery', 'entrega',
+    'burguer', 'pizza', 'lanche', 'restaurante', 'bar', 'cafe', 'cafeteria',
+    'comida', 'almoço', 'almoco', 'jantar', 'café', 'breakfast', 'marmita',
+    'mcdonalds', 'bk', 'burger king', 'subway', 'habibs',
+    'padaria', 'confeitaria', 'sorveteria', 'açai', 'acai',
+    'pastelaria', 'churrascaria', 'sushi', 'japonês', 'japones'
+  ],
+  'mercado': [
+    'mercado', 'supermercado', 'hipermercado',
+    'carrefour', 'pão de açúcar', 'extra', 'assaí', 'assai', 'atacadão', 'atacadao',
+    'walmart', 'sams', 'makro', 'maxxi',
+    'feira', 'hortifruti', 'sacolão', 'sacolao', 'verduras'
+  ],
+  'transporte': [
+    'uber', '99', '99pop', 'taxi', 'cabify', 'indriver',
+    'combustível', 'combustivel', 'gasolina', 'etanol', 'diesel', 'posto', 'gnv',
+    'ipva', 'licenciamento', 'multa', 'estacionamento',
+    'onibus', 'ônibus', 'metro', 'metrô', 'trem', 'bilhete',
+    'app', 'pedágio', 'pedagio', 'vistoria'
+  ],
+  'saúde': [
+    'farmácia', 'farmacia', 'drogaria', 'droga raia', 'pacheco', 'drogasil',
+    'remédio', 'remedio', 'medicamento', 'genérico', 'generico',
+    'médico', 'medico', 'consulta', 'exame', 'laboratório', 'laboratorio',
+    'hospital', 'clínica', 'clinica', 'dentista', 'odontologia',
+    'plano de saúde', 'plano de saude', 'unimed', 'amil', 'sulamerica'
+  ],
+  'assinaturas': [
+    'netflix', 'spotify', 'prime', 'amazon prime', 'youtube', 'premium',
+    'disney', 'disney+', 'hbo', 'max', 'paramount', 'star+',
+    'globoplay', 'telecine', 'streaming', 'apple tv', 'deezer',
+    'assinatura', 'mensalidade', 'recorrente'
+  ],
+  'moradia': [
+    'aluguel', 'imobiliária', 'imobiliaria', 'condomínio', 'condominio',
+    'luz', 'energia', 'eletricidade', 'cemig', 'enel', 'celpe',
+    'água', 'agua', 'saneamento', 'sabesp', 'caesb',
+    'internet', 'wifi', 'banda larga', 'fibra', 'vivo', 'claro', 'tim', 'oi',
+    'gás', 'gas', 'botijão', 'botijao',
+    'iptu', 'taxa', 'reforma', 'manutenção', 'manutencao'
+  ],
+  'educação': [
+    'curso', 'faculdade', 'universidade', 'escola', 'colégio', 'colegio',
+    'livro', 'apostila', 'material escolar', 'papelaria',
+    'ead', 'online', 'udemy', 'coursera', 'alura', 'rocketseat',
+    'matrícula', 'matricula', 'mensalidade escolar', 'inglês', 'ingles'
+  ],
+  'lazer': [
+    'cinema', 'ingresso', 'show', 'teatro', 'festival',
+    'parque', 'diversão', 'viagem', 'turismo', 'hotel', 'pousada',
+    'festa', 'balada', 'evento', 'jogo', 'futebol'
+  ],
+  'salário': [
+    'salário', 'salario', 'pagamento', 'pró-labore', 'pro-labore',
+    'freelance', 'freela', 'bico', 'extra', 'hora extra',
+    'comissão', 'comissao', 'bonificação', 'bonificacao', 'décimo', 'decimo'
+  ],
+  'outros': [
+    'diversos', 'outros', 'variados', 'geral'
+  ]
+};
+
 function parseQuickInput(text) {
   // Remove espaços extras
   text = text.trim();
@@ -136,26 +201,15 @@ function parseQuickInput(text) {
     accountId = accounts[0].id;
   }
   
-  // Detecta categoria por palavras-chave
+  // Detecta categoria por palavras-chave (agora com muito mais padrões!)
   let categoryId = null;
-  const categoryKeywords = {
-    'alimentação': ['ifood', 'iFood', 'burguer', 'pizza', 'restaurante', 'lanche', 'comida', 'almoço', 'jantar', 'cafe', 'bar'],
-    'mercado': ['mercado', 'supermercado', 'carrefour', 'pão de açúcar', 'extra', 'assaí', 'atacadão'],
-    'transporte': ['uber', '99', 'taxi', 'combustível', 'gasolina', 'etanol', 'diesel', 'ipva', 'onibus', 'metro'],
-    'saúde': ['farmácia', 'farmacia', 'remédio', 'remedio', 'médico', 'medico', 'hospital', 'consulta', 'exame'],
-    'assinaturas': ['netflix', 'spotify', 'prime', 'youtube', 'disney', 'hbo', 'streaming'],
-    'moradia': ['aluguel', 'condomínio', 'condominio', 'luz', 'energia', 'água', 'agua', 'internet', 'gás', 'gas'],
-    'educação': ['curso', 'faculdade', 'escola', 'livro', 'apostila', 'ead'],
-    'lazer': ['cinema', 'show', 'teatro', 'parque', 'viagem', 'festa'],
-    'salário': ['salário', 'salario', 'pagamento', 'freelance', 'bico']
-  };
-  
   const descLower = description.toLowerCase();
+  
   for (const cat of categories) {
     const catNameLower = cat.name.toLowerCase();
-    const keywords = categoryKeywords[catNameLower] || [];
+    const keywords = CATEGORY_KEYWORDS[catNameLower] || [];
     
-    if (keywords.some(kw => descLower.includes(kw))) {
+    if (keywords.some(kw => descLower.includes(kw.toLowerCase()))) {
       categoryId = cat.id;
       break;
     }
@@ -179,10 +233,16 @@ function parseQuickInput(text) {
 // ========== AUTH ==========
 
 async function checkAuth() {
+  // Re-read token from localStorage (pode ter mudado)
+  token = localStorage.getItem('token');
+  
   if (!token) {
     showAuthScreen();
     return;
   }
+
+  // Configura o header do axios com o token
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
   try {
     const response = await axios.get('/auth/me');
@@ -192,6 +252,7 @@ async function checkAuth() {
     showApp();
   } catch (error) {
     console.error('Auth error:', error);
+    // Token inválido ou expirado
     token = null;
     localStorage.removeItem('token');
     delete axios.defaults.headers.common['Authorization'];
@@ -228,12 +289,20 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   try {
     const response = await axios.post('/auth/login', { email, password });
     token = response.data.token;
+    
+    // Salva o token no localStorage
     localStorage.setItem('token', token);
+    
+    // Configura o axios para usar o token
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    
     currentUser = response.data.user;
     
+    // Carrega dashboard e mostra app
     await loadDashboard();
     showApp();
+    
+    showToast(`Bem-vindo, ${currentUser.name}!`);
   } catch (error) {
     console.error('Login error:', error);
     showError(error.response?.data?.error || 'Erro ao fazer login');
@@ -251,12 +320,20 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
   try {
     const response = await axios.post('/auth/register', { name, email, password });
     token = response.data.token;
+    
+    // Salva o token no localStorage
     localStorage.setItem('token', token);
+    
+    // Configura o axios para usar o token
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    
     currentUser = response.data.user;
     
+    // Carrega dashboard e mostra app
     await loadDashboard();
     showApp();
+    
+    showToast(`Conta criada com sucesso! Bem-vindo, ${currentUser.name}!`);
   } catch (error) {
     console.error('Register error:', error);
     showError(error.response?.data?.error || 'Erro ao criar conta');
@@ -824,36 +901,99 @@ document.getElementById('csvFileInput').addEventListener('change', async (e) => 
     const text = await file.text();
     const lines = text.split('\n').filter(l => l.trim());
     
-    // Skip header
-    let imported = 0;
-    for (let i = 1; i < lines.length; i++) {
-      const [date, description, amount, type, categoryName, accountName] = lines[i].split(',').map(s => s.trim().replace(/^"|"$/g, ''));
-      
-      if (!date || !amount) continue;
-      
-      // Find account
-      const account = accounts.find(a => a.name.toLowerCase() === accountName.toLowerCase());
-      if (!account) continue;
-      
-      // Find category
-      const category = categories.find(c => c.name.toLowerCase() === categoryName.toLowerCase());
-      
-      const txData = {
-        date,
-        description: description || 'Importado',
-        amount: parseFloat(amount),
-        type: type || (parseFloat(amount) < 0 ? 'expense' : 'income'),
-        account_id: account.id,
-        category_id: category?.id || null
-      };
-      
-      await axios.post('/transactions', txData);
-      imported++;
+    if (lines.length < 2) {
+      showToast('Arquivo CSV vazio ou inválido', 'error');
+      return;
     }
     
-    showToast(`✅ ${imported} transações importadas com sucesso!`);
+    // Skip header
+    let imported = 0;
+    let errors = 0;
+    
+    for (let i = 1; i < lines.length; i++) {
+      try {
+        // Parse CSV line (handle quoted values)
+        const parts = [];
+        let current = '';
+        let inQuotes = false;
+        
+        for (let j = 0; j < lines[i].length; j++) {
+          const char = lines[i][j];
+          if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if (char === ',' && !inQuotes) {
+            parts.push(current.trim().replace(/^"|"$/g, ''));
+            current = '';
+          } else {
+            current += char;
+          }
+        }
+        parts.push(current.trim().replace(/^"|"$/g, ''));
+        
+        const [date, description, amount, type, categoryName, accountName] = parts;
+        
+        if (!date || !amount) {
+          errors++;
+          continue;
+        }
+        
+        // Find account (case insensitive)
+        const account = accounts.find(a => 
+          a.name.toLowerCase().trim() === (accountName || '').toLowerCase().trim()
+        );
+        
+        if (!account) {
+          console.warn(`Conta não encontrada: "${accountName}"`);
+          errors++;
+          continue;
+        }
+        
+        // Find category (case insensitive, optional)
+        let category = null;
+        if (categoryName) {
+          category = categories.find(c => 
+            c.name.toLowerCase().trim() === categoryName.toLowerCase().trim()
+          );
+        }
+        
+        // Parse amount
+        const amountValue = parseFloat(amount);
+        if (isNaN(amountValue)) {
+          errors++;
+          continue;
+        }
+        
+        // Determine type
+        let txType = type?.toLowerCase().trim() || '';
+        if (!txType) {
+          txType = amountValue < 0 ? 'expense' : 'income';
+        }
+        
+        const txData = {
+          date: date.trim(),
+          description: description || 'Importado',
+          amount: Math.abs(amountValue),
+          type: txType,
+          account_id: account.id,
+          category_id: category?.id || null
+        };
+        
+        await axios.post('/transactions', txData);
+        imported++;
+      } catch (lineError) {
+        console.error(`Erro na linha ${i + 1}:`, lineError);
+        errors++;
+      }
+    }
+    
+    if (imported > 0) {
+      showToast(`✅ ${imported} transação(ões) importada(s) com sucesso!${errors > 0 ? ` (${errors} erro(s))` : ''}`);
+      await loadDashboard();
+    } else {
+      showToast(`❌ Nenhuma transação importada. ${errors} erro(s) encontrado(s).`, 'error');
+    }
+    
     e.target.value = '';
-    await loadDashboard();
   } catch (error) {
     console.error('Error importing CSV:', error);
     showToast('Erro ao importar CSV. Verifique o formato do arquivo.', 'error');

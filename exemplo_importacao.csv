@@ -1,0 +1,6 @@
+date,description,amount,type,category,account
+2024-01-15,"Mercado Assaí",-320.50,expense,Mercado,Nubank
+2024-01-16,"iFood",-42.90,expense,Alimentação,Nubank
+2024-01-20,"Salário",8500,income,Salário,BB
+2024-01-22,"Gasolina Shell",-210,expense,Transporte,BB
+2024-01-25,"Netflix",-49.90,expense,Assinaturas,Nubank
