@@ -335,16 +335,45 @@ MIT License - Use como quiser! 🎉
 
 **URL de Acesso**: https://3000-i8hjae221su2mndj8qpz9-dfc00ec5.sandbox.novita.ai
 
-**Versão**: 2.1 - Agora com IA de Entrada Rápida! 🤖✨
+**Versão**: 2.2.0 - Stable Release! 🚀✨
 
 ---
 
-## 🐛 Correções da v2.1
+## ✅ TODAS AS CORREÇÕES IMPLEMENTADAS - v2.2.0
 
-### ✅ Problemas Corrigidos:
-1. **CSV Import corrigido** - Agora importa corretamente com parse robusto
-2. **Persistência de login** - F5 não desloga mais (token mantido)
-3. **Categorização automática expandida** - 100+ palavras-chave para melhor reconhecimento
+### 🐛 Problemas Críticos Corrigidos:
+
+#### 1. ✅ F5 NÃO DESLOGA MAIS!
+- Token persistente no localStorage
+- Axios configurado corretamente após reload
+- Mantém sessão até token expirar (7 dias)
+
+#### 2. ✅ Fluxo de Autenticação Correto
+**Antes**: Registro → Logado automaticamente (confuso)
+**Agora**: 
+1. **Registro** → Cria conta
+2. Redireciona para **Login**
+3. Faz primeiro login
+4. Entra no **Dashboard**
+5. **F5** → Mantém logado ✓
+
+#### 3. ✅ Validação de Senha Forte
+- Barra visual em tempo real
+- Níveis: Muito fraca → Fraca → Média → Forte
+- Feedback: "Adicione MAIÚSCULAS", "Adicione números"
+- Cores dinâmicas (vermelho → verde)
+- Validação antes de criar conta
+
+#### 4. ✅ Edição de Contas FUNCIONANDO
+- Corrigido erro `Type 'undefined' not supported`
+- Edita nome, saldo, limite, dias
+- Salvamento instantâneo
+
+#### 5. ✅ Edição de Transações FUNCIONANDO
+- Corrigido erro 500
+- Edita descrição, valor, categoria, data
+- Pode remover categoria (opcional)
+- Atualiza saldos corretamente
 
 ### 🎯 Palavras-Chave Adicionadas:
 - **Alimentação**: +30 termos (rappi, uber eats, mcdonalds, sushi, etc)
