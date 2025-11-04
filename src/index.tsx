@@ -218,14 +218,29 @@ app.get('/', (c) => {
             placeholder="seu@email.com">
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Senha (mín. 6 caracteres)</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
           <input type="password" id="registerPassword" required minlength="6"
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-            placeholder="••••••••">
+            placeholder="Mínimo 6 caracteres">
+          
+          <!-- Password Strength Indicator -->
+          <div class="mt-2">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs text-gray-600">Força da senha:</span>
+              <span id="passwordStrengthLabel" class="text-xs font-semibold">-</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div id="passwordStrengthBar" class="h-2 rounded-full transition-all" style="width: 0%; background-color: #EF4444"></div>
+            </div>
+            <p id="passwordFeedback" class="text-xs text-gray-500 mt-1"></p>
+          </div>
         </div>
         <button type="submit" class="w-full gradient-pink text-white font-semibold py-3 rounded-lg hover:opacity-90 transition">
           Criar conta
         </button>
+        <p class="text-xs text-gray-600 text-center">
+          Após criar sua conta, você será redirecionado para fazer o login
+        </p>
       </form>
       
       <div id="authError" class="hidden mt-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm"></div>

@@ -254,7 +254,7 @@ transactions.put('/:id', async (c) => {
     }
 
     // Se o amount mudou, ajusta o saldo da conta
-    if (amount !== undefined && amount !== transaction.amount) {
+    if (amount !== undefined && amount !== null && amount !== transaction.amount) {
       const diff = amount - transaction.amount;
       await db
         .prepare('UPDATE accounts SET balance = balance + ? WHERE id = ? AND type = "account"')
@@ -262,17 +262,25 @@ transactions.put('/:id', async (c) => {
         .run();
     }
 
+    // Converte undefined para null
     await db
       .prepare(`
         UPDATE transactions
         SET description = COALESCE(?, description),
             amount = COALESCE(?, amount),
-            category_id = COALESCE(?, category_id),
+            category_id = ?,
             date = COALESCE(?, date),
             tags = COALESCE(?, tags)
         WHERE id = ?
       `)
-      .bind(description, amount, category_id, date, tags, txId)
+      .bind(
+        description ?? null,
+        amount ?? null,
+        category_id ?? null,
+        date ?? null,
+        tags ?? null,
+        txId
+      )
       .run();
 
     return c.json({ message: 'Transação atualizada com sucesso' });

@@ -102,6 +102,7 @@ accounts.put('/:id', async (c) => {
       return c.json({ error: 'Conta não encontrada' }, 404);
     }
 
+    // Converte undefined para null para o D1 aceitar
     await db
       .prepare(`
         UPDATE accounts
@@ -112,7 +113,14 @@ accounts.put('/:id', async (c) => {
             card_due_day = COALESCE(?, card_due_day)
         WHERE id = ?
       `)
-      .bind(name, balance, card_limit, card_closing_day, card_due_day, accountId)
+      .bind(
+        name ?? null,
+        balance ?? null,
+        card_limit ?? null,
+        card_closing_day ?? null,
+        card_due_day ?? null,
+        accountId
+      )
       .run();
 
     return c.json({ message: 'Conta atualizada com sucesso' });

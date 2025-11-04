@@ -230,10 +230,48 @@ function parseQuickInput(text) {
   };
 }
 
+// ========== PASSWORD STRENGTH ==========
+
+function checkPasswordStrength(password) {
+  let strength = 0;
+  const feedback = [];
+  
+  if (password.length >= 6) strength += 20;
+  if (password.length >= 8) strength += 10;
+  if (password.length >= 12) strength += 10;
+  
+  if (/[a-z]/.test(password)) strength += 15;
+  if (/[A-Z]/.test(password)) strength += 15;
+  if (/[0-9]/.test(password)) strength += 15;
+  if (/[^A-Za-z0-9]/.test(password)) strength += 15;
+  
+  if (password.length < 6) feedback.push('Mínimo 6 caracteres');
+  if (!/[a-z]/.test(password)) feedback.push('Adicione minúsculas');
+  if (!/[A-Z]/.test(password)) feedback.push('Adicione MAIÚSCULAS');
+  if (!/[0-9]/.test(password)) feedback.push('Adicione números');
+  if (!/[^A-Za-z0-9]/.test(password)) feedback.push('Adicione símbolos (!@#$)');
+  
+  let level = 'Muito fraca';
+  let color = '#EF4444';
+  
+  if (strength >= 80) {
+    level = 'Forte';
+    color = '#10B981';
+  } else if (strength >= 60) {
+    level = 'Média';
+    color = '#F59E0B';
+  } else if (strength >= 40) {
+    level = 'Fraca';
+    color = '#F97316';
+  }
+  
+  return { strength, level, color, feedback };
+}
+
 // ========== AUTH ==========
 
 async function checkAuth() {
-  // Re-read token from localStorage (pode ter mudado)
+  // SEMPRE re-lê do localStorage (persistência total)
   token = localStorage.getItem('token');
   
   if (!token) {
@@ -252,7 +290,7 @@ async function checkAuth() {
     showApp();
   } catch (error) {
     console.error('Auth error:', error);
-    // Token inválido ou expirado
+    // Token inválido ou expirado - limpa tudo
     token = null;
     localStorage.removeItem('token');
     delete axios.defaults.headers.common['Authorization'];
@@ -277,6 +315,23 @@ document.getElementById('registerTab').addEventListener('click', () => {
   document.getElementById('loginTab').classList.add('text-gray-400', 'border-0');
   document.getElementById('loginForm').classList.add('hidden');
   document.getElementById('registerForm').classList.remove('hidden');
+});
+
+// Password strength indicator
+document.getElementById('registerPassword').addEventListener('input', (e) => {
+  const password = e.target.value;
+  const result = checkPasswordStrength(password);
+  
+  document.getElementById('passwordStrengthBar').style.width = result.strength + '%';
+  document.getElementById('passwordStrengthBar').style.backgroundColor = result.color;
+  document.getElementById('passwordStrengthLabel').textContent = result.level;
+  document.getElementById('passwordStrengthLabel').style.color = result.color;
+  
+  if (result.feedback.length > 0) {
+    document.getElementById('passwordFeedback').textContent = result.feedback.join(' • ');
+  } else {
+    document.getElementById('passwordFeedback').textContent = '✓ Senha forte!';
+  }
 });
 
 // Login Form
@@ -317,23 +372,30 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
   const email = document.getElementById('registerEmail').value;
   const password = document.getElementById('registerPassword').value;
 
+  // Valida força da senha
+  const strength = checkPasswordStrength(password);
+  if (strength.strength < 40) {
+    showError(`Senha muito fraca! ${strength.feedback.join(', ')}`);
+    return;
+  }
+
   try {
-    const response = await axios.post('/auth/register', { name, email, password });
-    token = response.data.token;
+    // Registra o usuário (MAS NÃO LOGA AUTOMATICAMENTE)
+    await axios.post('/auth/register', { name, email, password });
     
-    // Salva o token no localStorage
-    localStorage.setItem('token', token);
+    // Limpa o formulário
+    document.getElementById('registerForm').reset();
     
-    // Configura o axios para usar o token
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    // Mostra mensagem de sucesso
+    showToast('✅ Conta criada com sucesso! Faça login para continuar.');
     
-    currentUser = response.data.user;
+    // Troca para a aba de login
+    document.getElementById('loginTab').click();
     
-    // Carrega dashboard e mostra app
-    await loadDashboard();
-    showApp();
+    // Preenche o email no login para facilitar
+    document.getElementById('loginEmail').value = email;
+    document.getElementById('loginPassword').focus();
     
-    showToast(`Conta criada com sucesso! Bem-vindo, ${currentUser.name}!`);
   } catch (error) {
     console.error('Register error:', error);
     showError(error.response?.data?.error || 'Erro ao criar conta');
