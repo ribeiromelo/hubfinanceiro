@@ -79,7 +79,13 @@ app.get('/', (c) => {
       to { opacity: 1; transform: translateY(0); }
     }
     
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
     .fade-in { animation: fadeIn 0.3s ease-out; }
+    .slide-up { animation: slideUp 0.4s ease-out; }
     
     /* Card hover */
     .card-hover {
@@ -108,11 +114,42 @@ app.get('/', (c) => {
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     }
     
+    .gradient-orange {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+    
     /* Glass effect */
     .glass {
       backdrop-filter: blur(10px);
       background: rgba(255, 255, 255, 0.9);
       border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Modal backdrop */
+    .modal-backdrop {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+    
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+    }
+    
+    .tooltip:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 6px 12px;
+      background: #1f2937;
+      color: white;
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+      margin-bottom: 8px;
+      z-index: 1000;
     }
   </style>
 </head>
@@ -212,6 +249,9 @@ app.get('/', (c) => {
           </div>
           
           <div class="flex items-center space-x-2">
+            <button id="manageBudgetsBtn" class="px-4 py-2 text-sm gradient-purple text-white rounded-lg hover:opacity-90 transition">
+              <i class="fas fa-chart-pie mr-2"></i>Orçamentos
+            </button>
             <button id="logoutBtn" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium">
               <i class="fas fa-sign-out-alt mr-2"></i>Sair
             </button>
@@ -279,51 +319,72 @@ app.get('/', (c) => {
         
         <div class="bg-white rounded-xl shadow-lg p-6 fade-in">
           <h2 class="text-lg font-bold text-gray-800 mb-4">Orçamentos</h2>
-          <div id="budgetList" class="space-y-3"></div>
+          <div id="budgetList" class="space-y-3 max-h-80 overflow-y-auto"></div>
         </div>
       </div>
 
-      <!-- Accounts & Quick Add -->
+      <!-- Quick Add Section -->
+      <div class="bg-white rounded-xl shadow-lg p-6 mb-8 fade-in">
+        <h2 class="text-lg font-bold text-gray-800 mb-4">
+          <i class="fas fa-magic mr-2 text-pink-600"></i>
+          Entrada Rápida Inteligente
+        </h2>
+        <p class="text-sm text-gray-600 mb-4">
+          Digite naturalmente e a IA entenderá! Exemplos: 
+          <span class="font-mono text-xs bg-gray-100 px-2 py-1 rounded">"50 mercado"</span>,
+          <span class="font-mono text-xs bg-gray-100 px-2 py-1 rounded">"-120 gasolina nubank"</span>,
+          <span class="font-mono text-xs bg-gray-100 px-2 py-1 rounded">"8500 salário"</span>
+        </p>
+        <div class="flex gap-3">
+          <input 
+            id="quickInput" 
+            type="text" 
+            placeholder='Ex: "50 mercado", "-120 gasolina", "8500 salário BB"...'
+            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+          />
+          <button id="quickAddBtn" class="gradient-pink text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition">
+            <i class="fas fa-sparkles mr-2"></i>Adicionar
+          </button>
+        </div>
+      </div>
+
+      <!-- Accounts & Actions -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6 fade-in">
-          <h2 class="text-lg font-bold text-gray-800 mb-4">Lançamento Rápido</h2>
-          <form id="quickAddForm" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <select id="quickType" class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
-                <option value="expense">Despesa (-)</option>
-                <option value="income">Receita (+)</option>
-              </select>
-              
-              <input type="date" id="quickDate" required
-                class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
-              
-              <input type="text" id="quickDesc" required placeholder="Descrição"
-                class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
-              
-              <input type="number" id="quickAmount" required step="0.01" placeholder="Valor"
-                class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
-              
-              <select id="quickAccount" class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
-                <option value="">Selecione a conta</option>
-              </select>
-              
-              <select id="quickCategory" class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
-                <option value="">Categoria (opcional)</option>
-              </select>
-            </div>
-            
-            <button type="submit" class="w-full gradient-pink text-white font-semibold py-3 rounded-lg hover:opacity-90 transition">
-              <i class="fas fa-plus mr-2"></i>Adicionar Transação
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-gray-800">
+              <i class="fas fa-university mr-2 text-blue-600"></i>
+              Contas & Cartões
+            </h2>
+            <button id="addAccountBtn" class="gradient-blue text-white px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition">
+              <i class="fas fa-plus mr-2"></i>Nova Conta
             </button>
-          </form>
+          </div>
+          <div id="accountsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
         
         <div class="bg-white rounded-xl shadow-lg p-6 fade-in">
-          <h2 class="text-lg font-bold text-gray-800 mb-4">Contas</h2>
-          <div id="accountsList" class="space-y-3"></div>
-          <button id="addAccountBtn" class="w-full mt-4 px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-pink-500 hover:text-pink-500 transition">
-            <i class="fas fa-plus mr-2"></i>Nova Conta
-          </button>
+          <h2 class="text-lg font-bold text-gray-800 mb-4">
+            <i class="fas fa-file-import mr-2 text-purple-600"></i>
+            Importar/Exportar
+          </h2>
+          <div class="space-y-3">
+            <button id="importCsvBtn" class="w-full gradient-purple text-white px-4 py-3 rounded-lg font-semibold hover:opacity-90 transition">
+              <i class="fas fa-upload mr-2"></i>Importar CSV
+            </button>
+            <input id="csvFileInput" type="file" accept=".csv" class="hidden" />
+            
+            <button id="exportCsvBtn" class="w-full border-2 border-purple-600 text-purple-600 px-4 py-3 rounded-lg font-semibold hover:bg-purple-50 transition">
+              <i class="fas fa-download mr-2"></i>Exportar CSV
+            </button>
+            
+            <div class="mt-4 p-3 bg-purple-50 rounded-lg">
+              <p class="text-xs text-purple-800">
+                <i class="fas fa-info-circle mr-1"></i>
+                <strong>Formato CSV:</strong> date,description,amount,type,category,account
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -332,7 +393,7 @@ app.get('/', (c) => {
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-lg font-bold text-gray-800">Transações Recentes</h2>
           <div class="flex space-x-2">
-            <select id="filterType" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+            <select id="filterType" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500">
               <option value="">Todos</option>
               <option value="income">Receitas</option>
               <option value="expense">Despesas</option>
@@ -357,6 +418,186 @@ app.get('/', (c) => {
         </div>
       </div>
     </main>
+  </div>
+
+  <!-- Modal: Add/Edit Account -->
+  <div id="accountModal" class="fixed inset-0 hidden items-center justify-center z-50">
+    <div class="absolute inset-0 modal-backdrop" onclick="closeAccountModal()"></div>
+    <div class="relative bg-white rounded-2xl shadow-2xl w-[95%] max-w-lg p-6 slide-up">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-bold text-gray-800">
+          <i class="fas fa-university mr-2 text-blue-600"></i>
+          <span id="accountModalTitle">Nova Conta</span>
+        </h3>
+        <button onclick="closeAccountModal()" class="text-gray-400 hover:text-gray-600 transition">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      
+      <form id="accountForm" class="space-y-4">
+        <input type="hidden" id="accountId" />
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nome da Conta/Cartão</label>
+          <input type="text" id="accountName" required
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Ex: Nubank, Banco do Brasil, Carteira">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+          <select id="accountType" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            <option value="account">💰 Conta Bancária (Corrente/Poupança)</option>
+            <option value="card">💳 Cartão de Crédito</option>
+          </select>
+        </div>
+        
+        <div id="accountFields">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Saldo Inicial</label>
+            <input type="number" id="accountBalance" step="0.01" value="0"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="0.00">
+          </div>
+        </div>
+        
+        <div id="cardFields" class="hidden space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Limite do Cartão</label>
+            <input type="number" id="cardLimit" step="0.01" value="0"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="5000.00">
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Dia de Fechamento</label>
+              <input type="number" id="cardClosingDay" min="1" max="31" value="10"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="10">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Dia de Vencimento</label>
+              <input type="number" id="cardDueDay" min="1" max="31" value="17"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="17">
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex gap-3 mt-6">
+          <button type="submit" class="flex-1 gradient-blue text-white font-semibold py-3 rounded-lg hover:opacity-90 transition">
+            <i class="fas fa-save mr-2"></i>Salvar
+          </button>
+          <button type="button" onclick="closeAccountModal()" class="flex-1 border-2 border-gray-300 text-gray-700 font-semibold py-3 rounded-lg hover:bg-gray-50 transition">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Manage Budgets -->
+  <div id="budgetModal" class="fixed inset-0 hidden items-center justify-center z-50">
+    <div class="absolute inset-0 modal-backdrop" onclick="closeBudgetModal()"></div>
+    <div class="relative bg-white rounded-2xl shadow-2xl w-[95%] max-w-2xl p-6 slide-up max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-bold text-gray-800">
+          <i class="fas fa-chart-pie mr-2 text-purple-600"></i>
+          Gerenciar Orçamentos
+        </h3>
+        <button onclick="closeBudgetModal()" class="text-gray-400 hover:text-gray-600 transition">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      
+      <div id="budgetFormsList" class="space-y-4"></div>
+      
+      <div class="mt-6 flex justify-end">
+        <button onclick="closeBudgetModal()" class="gradient-purple text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition">
+          <i class="fas fa-check mr-2"></i>Concluído
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Edit Transaction -->
+  <div id="transactionModal" class="fixed inset-0 hidden items-center justify-center z-50">
+    <div class="absolute inset-0 modal-backdrop" onclick="closeTransactionModal()"></div>
+    <div class="relative bg-white rounded-2xl shadow-2xl w-[95%] max-w-lg p-6 slide-up">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-bold text-gray-800">
+          <i class="fas fa-edit mr-2 text-pink-600"></i>
+          Editar Transação
+        </h3>
+        <button onclick="closeTransactionModal()" class="text-gray-400 hover:text-gray-600 transition">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      
+      <form id="transactionForm" class="space-y-4">
+        <input type="hidden" id="transactionId" />
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+            <select id="txType" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
+              <option value="expense">Despesa (-)</option>
+              <option value="income">Receita (+)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Data</label>
+            <input type="date" id="txDate" required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+          </div>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+          <input type="text" id="txDescription" required
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+            placeholder="Ex: Mercado, Salário, Gasolina">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Valor (R$)</label>
+          <input type="number" id="txAmount" required step="0.01"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+            placeholder="0.00">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Conta</label>
+          <select id="txAccount" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
+            <option value="">Selecione a conta</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+          <select id="txCategory" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
+            <option value="">Sem categoria</option>
+          </select>
+        </div>
+        
+        <div class="flex gap-3 mt-6">
+          <button type="submit" class="flex-1 gradient-pink text-white font-semibold py-3 rounded-lg hover:opacity-90 transition">
+            <i class="fas fa-save mr-2"></i>Salvar
+          </button>
+          <button type="button" onclick="closeTransactionModal()" class="flex-1 border-2 border-gray-300 text-gray-700 font-semibold py-3 rounded-lg hover:bg-gray-50 transition">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 hidden bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg z-50 slide-up">
+    <div class="flex items-center space-x-2">
+      <i id="toastIcon" class="fas fa-check-circle"></i>
+      <span id="toastMessage">Ação realizada com sucesso!</span>
+    </div>
   </div>
 
   <script src="/static/app.js"></script>

@@ -1,4 +1,4 @@
-// Hub Financeiro - Frontend Application
+// Hub Financeiro Pro - Frontend Application v2.0
 
 const API_URL = window.location.origin + '/api';
 let currentUser = null;
@@ -7,6 +7,8 @@ let accounts = [];
 let categories = [];
 let transactions = [];
 let categoryChart = null;
+let editingAccountId = null;
+let editingTransactionId = null;
 
 // Configuração do Axios
 axios.defaults.baseURL = API_URL;
@@ -24,8 +26,22 @@ function formatCurrency(value) {
 }
 
 function formatDate(dateStr) {
-  const date = new Date(dateStr);
+  const date = new Date(dateStr + 'T00:00:00');
   return date.toLocaleDateString('pt-BR');
+}
+
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  const icon = document.getElementById('toastIcon');
+  const msg = document.getElementById('toastMessage');
+  
+  icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+  msg.textContent = message;
+  toast.classList.remove('hidden');
+  
+  setTimeout(() => {
+    toast.classList.add('hidden');
+  }, 3000);
 }
 
 function showError(message) {
@@ -35,7 +51,7 @@ function showError(message) {
     errorDiv.classList.remove('hidden');
     setTimeout(() => errorDiv.classList.add('hidden'), 5000);
   } else {
-    alert(message);
+    showToast(message, 'error');
   }
 }
 
@@ -53,6 +69,111 @@ function showApp() {
   hideLoading();
   document.getElementById('authScreen').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
+}
+
+// ========== SMART QUICK INPUT PARSER ==========
+
+function parseQuickInput(text) {
+  // Remove espaços extras
+  text = text.trim();
+  
+  // Detecta valor (com ou sem R$, com vírgula ou ponto)
+  const valueMatch = text.match(/-?\s*R?\$?\s*([\d.,]+)/i);
+  if (!valueMatch) {
+    return null;
+  }
+  
+  let valueStr = valueMatch[1].replace(/\./g, '').replace(',', '.');
+  let amount = parseFloat(valueStr);
+  
+  if (isNaN(amount)) return null;
+  
+  // Detecta tipo: negativo = despesa, positivo = receita
+  let type = 'expense';
+  if (text.includes('-') || amount < 0) {
+    type = 'expense';
+    amount = Math.abs(amount);
+  } else if (amount > 1000) {
+    // Valores altos provavelmente são receitas
+    type = 'income';
+  }
+  
+  // Remove o valor do texto para pegar descrição
+  let description = text.replace(valueMatch[0], '').trim();
+  
+  // Detecta conta/cartão por palavras-chave
+  let accountId = null;
+  const accountKeywords = {
+    'nubank': ['nubank', 'nu'],
+    'bb': ['bb', 'banco do brasil'],
+    'inter': ['inter', 'banco inter'],
+    'c6': ['c6', 'c6 bank'],
+    'itau': ['itau', 'itaú'],
+    'bradesco': ['bradesco'],
+    'santander': ['santander'],
+    'caixa': ['caixa', 'cef'],
+    'carteira': ['carteira', 'dinheiro', 'cash']
+  };
+  
+  for (const acc of accounts) {
+    const accNameLower = acc.name.toLowerCase();
+    for (const [key, keywords] of Object.entries(accountKeywords)) {
+      if (keywords.some(kw => accNameLower.includes(kw) || description.toLowerCase().includes(kw))) {
+        accountId = acc.id;
+        // Remove palavra-chave da descrição
+        keywords.forEach(kw => {
+          const regex = new RegExp('\\b' + kw + '\\b', 'gi');
+          description = description.replace(regex, '').trim();
+        });
+        break;
+      }
+    }
+    if (accountId) break;
+  }
+  
+  // Se não encontrou, usa primeira conta
+  if (!accountId && accounts.length > 0) {
+    accountId = accounts[0].id;
+  }
+  
+  // Detecta categoria por palavras-chave
+  let categoryId = null;
+  const categoryKeywords = {
+    'alimentação': ['ifood', 'iFood', 'burguer', 'pizza', 'restaurante', 'lanche', 'comida', 'almoço', 'jantar', 'cafe', 'bar'],
+    'mercado': ['mercado', 'supermercado', 'carrefour', 'pão de açúcar', 'extra', 'assaí', 'atacadão'],
+    'transporte': ['uber', '99', 'taxi', 'combustível', 'gasolina', 'etanol', 'diesel', 'ipva', 'onibus', 'metro'],
+    'saúde': ['farmácia', 'farmacia', 'remédio', 'remedio', 'médico', 'medico', 'hospital', 'consulta', 'exame'],
+    'assinaturas': ['netflix', 'spotify', 'prime', 'youtube', 'disney', 'hbo', 'streaming'],
+    'moradia': ['aluguel', 'condomínio', 'condominio', 'luz', 'energia', 'água', 'agua', 'internet', 'gás', 'gas'],
+    'educação': ['curso', 'faculdade', 'escola', 'livro', 'apostila', 'ead'],
+    'lazer': ['cinema', 'show', 'teatro', 'parque', 'viagem', 'festa'],
+    'salário': ['salário', 'salario', 'pagamento', 'freelance', 'bico']
+  };
+  
+  const descLower = description.toLowerCase();
+  for (const cat of categories) {
+    const catNameLower = cat.name.toLowerCase();
+    const keywords = categoryKeywords[catNameLower] || [];
+    
+    if (keywords.some(kw => descLower.includes(kw))) {
+      categoryId = cat.id;
+      break;
+    }
+  }
+  
+  // Se descrição ficou vazia, usa valor como descrição
+  if (!description) {
+    description = type === 'income' ? 'Receita' : 'Despesa';
+  }
+  
+  return {
+    type,
+    amount,
+    description: description || 'Lançamento',
+    account_id: accountId,
+    category_id: categoryId,
+    date: new Date().toISOString().split('T')[0]
+  };
 }
 
 // ========== AUTH ==========
@@ -174,7 +295,6 @@ async function loadDashboard() {
     renderBudgets(statsRes.data.categoriesStats);
     renderAccounts();
     renderTransactions();
-    populateFormSelects();
   } catch (error) {
     console.error('Error loading dashboard:', error);
     showError('Erro ao carregar dados do dashboard');
@@ -237,20 +357,38 @@ function renderBudgets(categoriesStats) {
   const container = document.getElementById('budgetList');
   container.innerHTML = '';
 
-  categoriesStats.forEach(cat => {
-    if (!cat.budget_limit || cat.budget_limit === 0) return;
+  // Filtra apenas categorias com orçamento
+  const withBudget = categoriesStats.filter(cat => cat.budget_limit && cat.budget_limit > 0);
 
+  if (withBudget.length === 0) {
+    container.innerHTML = `
+      <div class="text-center py-8 text-gray-500">
+        <i class="fas fa-chart-pie text-4xl mb-3"></i>
+        <p>Nenhum orçamento configurado</p>
+        <button onclick="openBudgetModal()" class="mt-3 text-purple-600 hover:text-purple-800 font-semibold">
+          <i class="fas fa-plus mr-1"></i>Configurar Orçamentos
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  withBudget.forEach(cat => {
     const spent = cat.spent || 0;
     const percent = Math.min(Math.round((spent / cat.budget_limit) * 100), 100);
+    const isOverBudget = percent >= 100;
 
     const item = document.createElement('div');
-    item.className = 'border-l-4 pl-3 py-2';
-    item.style.borderColor = cat.color || '#EC4899';
+    item.className = 'border-l-4 pl-3 py-2 hover:bg-gray-50 rounded transition';
+    item.style.borderColor = isOverBudget ? '#EF4444' : (cat.color || '#EC4899');
     
     item.innerHTML = `
       <div class="flex justify-between items-center mb-1">
         <span class="font-medium text-gray-800">${cat.icon || '💰'} ${cat.name || 'Sem categoria'}</span>
-        <span class="text-sm ${percent >= 100 ? 'text-red-600' : 'text-gray-600'} font-semibold">${percent}%</span>
+        <span class="text-sm ${isOverBudget ? 'text-red-600' : 'text-gray-600'} font-semibold">
+          ${percent}%
+          ${isOverBudget ? '<i class="fas fa-exclamation-triangle ml-1"></i>' : ''}
+        </span>
       </div>
       <div class="flex justify-between text-xs text-gray-500 mb-1">
         <span>Gasto: ${formatCurrency(spent)}</span>
@@ -258,80 +396,125 @@ function renderBudgets(categoriesStats) {
       </div>
       <div class="w-full bg-gray-200 rounded-full h-2">
         <div class="h-2 rounded-full transition-all" 
-             style="width: ${percent}%; background-color: ${cat.color || '#EC4899'}"></div>
+             style="width: ${percent}%; background-color: ${isOverBudget ? '#EF4444' : (cat.color || '#EC4899')}"></div>
       </div>
     `;
     
     container.appendChild(item);
   });
-
-  if (categoriesStats.length === 0 || categoriesStats.every(c => !c.budget_limit)) {
-    container.innerHTML = '<p class="text-gray-500 text-sm text-center py-4">Nenhum orçamento configurado</p>';
-  }
 }
 
 function renderAccounts() {
   const container = document.getElementById('accountsList');
   container.innerHTML = '';
 
+  if (accounts.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-2 text-center py-8 text-gray-500">
+        <i class="fas fa-university text-4xl mb-3"></i>
+        <p>Nenhuma conta cadastrada</p>
+      </div>
+    `;
+    return;
+  }
+
   accounts.forEach(acc => {
     const item = document.createElement('div');
-    item.className = 'p-3 border border-gray-200 rounded-lg hover:border-pink-500 transition';
+    item.className = 'p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition cursor-pointer';
     
     if (acc.type === 'account') {
       item.innerHTML = `
-        <div class="flex justify-between items-center">
-          <div>
-            <p class="font-medium text-gray-800">${acc.name}</p>
-            <p class="text-xs text-gray-500">Conta</p>
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2">
+            <div class="w-10 h-10 gradient-blue rounded-lg flex items-center justify-center">
+              <i class="fas fa-university text-white"></i>
+            </div>
+            <div>
+              <p class="font-semibold text-gray-800">${acc.name}</p>
+              <p class="text-xs text-gray-500">Conta Bancária</p>
+            </div>
           </div>
-          <p class="font-bold text-gray-800">${formatCurrency(acc.balance)}</p>
+          <button onclick="openEditAccount(${acc.id})" class="text-gray-400 hover:text-blue-600 transition">
+            <i class="fas fa-edit"></i>
+          </button>
+        </div>
+        <div class="mt-3 pt-3 border-t border-gray-100">
+          <p class="text-sm text-gray-600">Saldo Atual</p>
+          <p class="text-xl font-bold text-gray-800">${formatCurrency(acc.balance)}</p>
         </div>
       `;
     } else {
       item.innerHTML = `
-        <div>
-          <div class="flex justify-between items-center mb-1">
-            <p class="font-medium text-gray-800">${acc.name}</p>
-            <span class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded-full">Cartão</span>
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2">
+            <div class="w-10 h-10 gradient-purple rounded-lg flex items-center justify-center">
+              <i class="fas fa-credit-card text-white"></i>
+            </div>
+            <div>
+              <p class="font-semibold text-gray-800">${acc.name}</p>
+              <p class="text-xs text-gray-500">Cartão de Crédito</p>
+            </div>
           </div>
-          <p class="text-xs text-gray-500">Limite: ${formatCurrency(acc.card_limit)}</p>
+          <button onclick="openEditAccount(${acc.id})" class="text-gray-400 hover:text-purple-600 transition">
+            <i class="fas fa-edit"></i>
+          </button>
+        </div>
+        <div class="mt-3 pt-3 border-t border-gray-100 space-y-1">
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600">Limite:</span>
+            <span class="font-semibold text-gray-800">${formatCurrency(acc.card_limit)}</span>
+          </div>
+          <div class="flex justify-between text-xs text-gray-500">
+            <span>Fechamento: dia ${acc.card_closing_day}</span>
+            <span>Vencimento: dia ${acc.card_due_day}</span>
+          </div>
         </div>
       `;
     }
     
     container.appendChild(item);
   });
-
-  if (accounts.length === 0) {
-    container.innerHTML = '<p class="text-gray-500 text-sm text-center py-4">Nenhuma conta cadastrada</p>';
-  }
 }
 
 function renderTransactions() {
   const tbody = document.getElementById('transactionsList');
   tbody.innerHTML = '';
 
-  const filtered = transactions.slice(0, 20); // Últimas 20
+  const filtered = transactions.slice(0, 50);
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="text-center py-12 text-gray-500">
+          <i class="fas fa-receipt text-4xl mb-3"></i>
+          <p>Nenhuma transação encontrada</p>
+        </td>
+      </tr>
+    `;
+    return;
+  }
 
   filtered.forEach(tx => {
     const tr = document.createElement('tr');
-    tr.className = 'border-b border-gray-100 hover:bg-gray-50';
+    tr.className = 'border-b border-gray-100 hover:bg-gray-50 transition';
     
     const amountClass = tx.type === 'income' ? 'text-green-600' : 'text-red-600';
     
     tr.innerHTML = `
       <td class="py-3 px-4 text-sm text-gray-600">${formatDate(tx.date)}</td>
-      <td class="py-3 px-4 text-sm text-gray-800">${tx.description}</td>
+      <td class="py-3 px-4 text-sm text-gray-800 font-medium">${tx.description}</td>
       <td class="py-3 px-4 text-sm">
-        <span class="px-2 py-1 rounded-full text-xs" style="background-color: ${tx.category_color || '#E5E7EB'}; color: #374151">
+        <span class="px-2 py-1 rounded-full text-xs font-medium" style="background-color: ${tx.category_color || '#E5E7EB'}20; color: ${tx.category_color || '#6B7280'}">
           ${tx.category_icon || '💰'} ${tx.category_name || 'Sem categoria'}
         </span>
       </td>
       <td class="py-3 px-4 text-sm text-gray-600">${tx.account_name}</td>
-      <td class="py-3 px-4 text-sm text-right font-semibold ${amountClass}">${formatCurrency(tx.amount)}</td>
+      <td class="py-3 px-4 text-sm text-right font-bold ${amountClass}">${formatCurrency(tx.amount)}</td>
       <td class="py-3 px-4 text-right">
-        <button onclick="deleteTransaction(${tx.id})" class="text-red-600 hover:text-red-800 text-sm">
+        <button onclick="openEditTransaction(${tx.id})" class="text-blue-600 hover:text-blue-800 mr-2 transition" data-tooltip="Editar">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button onclick="deleteTransaction(${tx.id})" class="text-red-600 hover:text-red-800 transition" data-tooltip="Excluir">
           <i class="fas fa-trash"></i>
         </button>
       </td>
@@ -339,74 +522,278 @@ function renderTransactions() {
     
     tbody.appendChild(tr);
   });
-
-  if (filtered.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-500">Nenhuma transação encontrada</td></tr>';
-  }
 }
 
-function populateFormSelects() {
-  // Popula select de contas
-  const accountSelect = document.getElementById('quickAccount');
-  accountSelect.innerHTML = '<option value="">Selecione a conta</option>';
-  accounts.forEach(acc => {
-    const option = document.createElement('option');
-    option.value = acc.id;
-    option.textContent = acc.name;
-    accountSelect.appendChild(option);
-  });
+// ========== QUICK ADD (SMART INPUT) ==========
 
-  // Popula select de categorias
-  const categorySelect = document.getElementById('quickCategory');
-  categorySelect.innerHTML = '<option value="">Categoria (opcional)</option>';
-  categories.forEach(cat => {
-    const option = document.createElement('option');
-    option.value = cat.id;
-    option.textContent = `${cat.icon} ${cat.name}`;
-    categorySelect.appendChild(option);
-  });
-
-  // Define data de hoje
-  document.getElementById('quickDate').value = new Date().toISOString().split('T')[0];
-}
-
-// ========== TRANSACTIONS ==========
-
-document.getElementById('quickAddForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const type = document.getElementById('quickType').value;
-  const date = document.getElementById('quickDate').value;
-  const description = document.getElementById('quickDesc').value;
-  const amount = parseFloat(document.getElementById('quickAmount').value);
-  const account_id = parseInt(document.getElementById('quickAccount').value);
-  const category_id = document.getElementById('quickCategory').value ? parseInt(document.getElementById('quickCategory').value) : null;
-
-  if (!account_id) {
-    showError('Selecione uma conta');
+document.getElementById('quickAddBtn').addEventListener('click', async () => {
+  const input = document.getElementById('quickInput');
+  const text = input.value.trim();
+  
+  if (!text) {
+    showToast('Digite algo para adicionar', 'error');
     return;
   }
-
+  
+  const parsed = parseQuickInput(text);
+  
+  if (!parsed) {
+    showToast('Não consegui entender. Tente: "50 mercado", "-120 gasolina", "8500 salário"', 'error');
+    return;
+  }
+  
   try {
-    await axios.post('/transactions', {
-      type,
-      date,
-      description,
-      amount,
-      account_id,
-      category_id
-    });
-
-    // Limpa form
-    document.getElementById('quickDesc').value = '';
-    document.getElementById('quickAmount').value = '';
-    document.getElementById('quickCategory').value = '';
-
-    // Recarrega dashboard
+    await axios.post('/transactions', parsed);
+    input.value = '';
     await loadDashboard();
+    showToast(`✨ ${parsed.type === 'income' ? 'Receita' : 'Despesa'} de ${formatCurrency(parsed.amount)} adicionada!`);
   } catch (error) {
     console.error('Error adding transaction:', error);
-    showError(error.response?.data?.error || 'Erro ao adicionar transação');
+    showToast(error.response?.data?.error || 'Erro ao adicionar transação', 'error');
+  }
+});
+
+// Enter key support
+document.getElementById('quickInput').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    document.getElementById('quickAddBtn').click();
+  }
+});
+
+// ========== ACCOUNT MODAL ==========
+
+function openAccountModal() {
+  editingAccountId = null;
+  document.getElementById('accountModalTitle').textContent = 'Nova Conta';
+  document.getElementById('accountForm').reset();
+  document.getElementById('accountId').value = '';
+  document.getElementById('accountType').value = 'account';
+  toggleAccountFields();
+  document.getElementById('accountModal').classList.remove('hidden');
+  document.getElementById('accountModal').classList.add('flex');
+}
+
+function openEditAccount(id) {
+  const account = accounts.find(a => a.id === id);
+  if (!account) return;
+  
+  editingAccountId = id;
+  document.getElementById('accountModalTitle').textContent = 'Editar Conta';
+  document.getElementById('accountId').value = id;
+  document.getElementById('accountName').value = account.name;
+  document.getElementById('accountType').value = account.type;
+  
+  if (account.type === 'account') {
+    document.getElementById('accountBalance').value = account.balance || 0;
+  } else {
+    document.getElementById('cardLimit').value = account.card_limit || 0;
+    document.getElementById('cardClosingDay').value = account.card_closing_day || 10;
+    document.getElementById('cardDueDay').value = account.card_due_day || 17;
+  }
+  
+  toggleAccountFields();
+  document.getElementById('accountModal').classList.remove('hidden');
+  document.getElementById('accountModal').classList.add('flex');
+}
+
+function closeAccountModal() {
+  document.getElementById('accountModal').classList.add('hidden');
+  document.getElementById('accountModal').classList.remove('flex');
+}
+
+function toggleAccountFields() {
+  const type = document.getElementById('accountType').value;
+  const accountFields = document.getElementById('accountFields');
+  const cardFields = document.getElementById('cardFields');
+  
+  if (type === 'account') {
+    accountFields.classList.remove('hidden');
+    cardFields.classList.add('hidden');
+  } else {
+    accountFields.classList.add('hidden');
+    cardFields.classList.remove('hidden');
+  }
+}
+
+document.getElementById('accountType').addEventListener('change', toggleAccountFields);
+
+document.getElementById('addAccountBtn').addEventListener('click', openAccountModal);
+
+document.getElementById('accountForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const id = document.getElementById('accountId').value;
+  const name = document.getElementById('accountName').value;
+  const type = document.getElementById('accountType').value;
+  
+  const data = { name, type };
+  
+  if (type === 'account') {
+    data.balance = parseFloat(document.getElementById('accountBalance').value) || 0;
+  } else {
+    data.card_limit = parseFloat(document.getElementById('cardLimit').value) || 0;
+    data.card_closing_day = parseInt(document.getElementById('cardClosingDay').value) || 10;
+    data.card_due_day = parseInt(document.getElementById('cardDueDay').value) || 17;
+  }
+  
+  try {
+    if (id) {
+      await axios.put(`/accounts/${id}`, data);
+      showToast('Conta atualizada com sucesso!');
+    } else {
+      await axios.post('/accounts', data);
+      showToast('Conta criada com sucesso!');
+    }
+    
+    closeAccountModal();
+    await loadDashboard();
+  } catch (error) {
+    console.error('Error saving account:', error);
+    showToast(error.response?.data?.error || 'Erro ao salvar conta', 'error');
+  }
+});
+
+// ========== BUDGET MODAL ==========
+
+function openBudgetModal() {
+  renderBudgetForms();
+  document.getElementById('budgetModal').classList.remove('hidden');
+  document.getElementById('budgetModal').classList.add('flex');
+}
+
+function closeBudgetModal() {
+  document.getElementById('budgetModal').classList.add('hidden');
+  document.getElementById('budgetModal').classList.remove('flex');
+  loadDashboard(); // Reload to update budgets
+}
+
+function renderBudgetForms() {
+  const container = document.getElementById('budgetFormsList');
+  container.innerHTML = '';
+  
+  categories.forEach(cat => {
+    const item = document.createElement('div');
+    item.className = 'p-4 border border-gray-200 rounded-lg hover:border-purple-500 transition';
+    
+    item.innerHTML = `
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center space-x-3">
+          <span class="text-2xl">${cat.icon || '💰'}</span>
+          <div>
+            <p class="font-semibold text-gray-800">${cat.name}</p>
+            <p class="text-xs text-gray-500">Orçamento mensal</p>
+          </div>
+        </div>
+        <div class="w-8 h-8 rounded-full" style="background-color: ${cat.color}"></div>
+      </div>
+      
+      <div class="flex items-center space-x-2">
+        <span class="text-gray-600 text-sm">R$</span>
+        <input 
+          type="number" 
+          step="0.01" 
+          value="${cat.budget_limit || 0}"
+          data-category-id="${cat.id}"
+          class="budget-input flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          placeholder="0.00"
+        />
+        <button 
+          onclick="saveBudget(${cat.id})" 
+          class="gradient-purple text-white px-4 py-2 rounded-lg hover:opacity-90 transition">
+          <i class="fas fa-save"></i>
+        </button>
+      </div>
+    `;
+    
+    container.appendChild(item);
+  });
+}
+
+async function saveBudget(categoryId) {
+  const input = document.querySelector(`input[data-category-id="${categoryId}"]`);
+  const budgetLimit = parseFloat(input.value) || 0;
+  
+  try {
+    await axios.put(`/categories/${categoryId}`, { budget_limit: budgetLimit });
+    showToast('Orçamento atualizado!');
+  } catch (error) {
+    console.error('Error saving budget:', error);
+    showToast('Erro ao salvar orçamento', 'error');
+  }
+}
+
+document.getElementById('manageBudgetsBtn').addEventListener('click', openBudgetModal);
+
+// ========== TRANSACTION MODAL ==========
+
+function openEditTransaction(id) {
+  const tx = transactions.find(t => t.id === id);
+  if (!tx) return;
+  
+  editingTransactionId = id;
+  document.getElementById('transactionId').value = id;
+  document.getElementById('txType').value = tx.type;
+  document.getElementById('txDate').value = tx.date;
+  document.getElementById('txDescription').value = tx.description;
+  document.getElementById('txAmount').value = Math.abs(tx.amount);
+  
+  // Populate selects
+  populateTransactionSelects();
+  
+  document.getElementById('txAccount').value = tx.account_id;
+  document.getElementById('txCategory').value = tx.category_id || '';
+  
+  document.getElementById('transactionModal').classList.remove('hidden');
+  document.getElementById('transactionModal').classList.add('flex');
+}
+
+function closeTransactionModal() {
+  document.getElementById('transactionModal').classList.add('hidden');
+  document.getElementById('transactionModal').classList.remove('flex');
+}
+
+function populateTransactionSelects() {
+  const accountSelect = document.getElementById('txAccount');
+  accountSelect.innerHTML = '<option value="">Selecione a conta</option>';
+  accounts.forEach(acc => {
+    accountSelect.innerHTML += `<option value="${acc.id}">${acc.name}</option>`;
+  });
+  
+  const categorySelect = document.getElementById('txCategory');
+  categorySelect.innerHTML = '<option value="">Sem categoria</option>';
+  categories.forEach(cat => {
+    categorySelect.innerHTML += `<option value="${cat.id}">${cat.icon} ${cat.name}</option>`;
+  });
+}
+
+document.getElementById('transactionForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const id = document.getElementById('transactionId').value;
+  const type = document.getElementById('txType').value;
+  const date = document.getElementById('txDate').value;
+  const description = document.getElementById('txDescription').value;
+  const amount = parseFloat(document.getElementById('txAmount').value);
+  const account_id = parseInt(document.getElementById('txAccount').value);
+  const category_id = document.getElementById('txCategory').value ? parseInt(document.getElementById('txCategory').value) : null;
+  
+  const data = {
+    type,
+    date,
+    description,
+    amount,
+    account_id,
+    category_id
+  };
+  
+  try {
+    await axios.put(`/transactions/${id}`, data);
+    showToast('Transação atualizada com sucesso!');
+    closeTransactionModal();
+    await loadDashboard();
+  } catch (error) {
+    console.error('Error updating transaction:', error);
+    showToast(error.response?.data?.error || 'Erro ao atualizar transação', 'error');
   }
 });
 
@@ -416,55 +803,90 @@ async function deleteTransaction(id) {
   try {
     await axios.delete(`/transactions/${id}`);
     await loadDashboard();
+    showToast('Transação excluída com sucesso!');
   } catch (error) {
     console.error('Error deleting transaction:', error);
-    showError('Erro ao excluir transação');
+    showToast('Erro ao excluir transação', 'error');
   }
 }
 
-// ========== ADD ACCOUNT MODAL (Simple prompt for now) ==========
+// ========== CSV IMPORT/EXPORT ==========
 
-document.getElementById('addAccountBtn').addEventListener('click', async () => {
-  const name = prompt('Nome da conta:');
-  if (!name) return;
+document.getElementById('importCsvBtn').addEventListener('click', () => {
+  document.getElementById('csvFileInput').click();
+});
 
-  const typeOptions = 'Digite:\n1 - Conta corrente/poupança\n2 - Cartão de crédito';
-  const type = prompt(typeOptions);
+document.getElementById('csvFileInput').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
   
-  let accountType = 'account';
-  let balance = 0;
-  let card_limit = 0;
-  let card_closing_day = 0;
-  let card_due_day = 0;
-
-  if (type === '2') {
-    accountType = 'card';
-    const limitStr = prompt('Limite do cartão (em R$):');
-    card_limit = parseFloat(limitStr) || 0;
-    const closingStr = prompt('Dia de fechamento da fatura (1-31):');
-    card_closing_day = parseInt(closingStr) || 10;
-    const dueStr = prompt('Dia de vencimento da fatura (1-31):');
-    card_due_day = parseInt(dueStr) || 17;
-  } else {
-    const balanceStr = prompt('Saldo inicial (em R$):');
-    balance = parseFloat(balanceStr) || 0;
-  }
-
   try {
-    await axios.post('/accounts', {
-      name,
-      type: accountType,
-      balance,
-      card_limit,
-      card_closing_day,
-      card_due_day
-    });
-
+    const text = await file.text();
+    const lines = text.split('\n').filter(l => l.trim());
+    
+    // Skip header
+    let imported = 0;
+    for (let i = 1; i < lines.length; i++) {
+      const [date, description, amount, type, categoryName, accountName] = lines[i].split(',').map(s => s.trim().replace(/^"|"$/g, ''));
+      
+      if (!date || !amount) continue;
+      
+      // Find account
+      const account = accounts.find(a => a.name.toLowerCase() === accountName.toLowerCase());
+      if (!account) continue;
+      
+      // Find category
+      const category = categories.find(c => c.name.toLowerCase() === categoryName.toLowerCase());
+      
+      const txData = {
+        date,
+        description: description || 'Importado',
+        amount: parseFloat(amount),
+        type: type || (parseFloat(amount) < 0 ? 'expense' : 'income'),
+        account_id: account.id,
+        category_id: category?.id || null
+      };
+      
+      await axios.post('/transactions', txData);
+      imported++;
+    }
+    
+    showToast(`✅ ${imported} transações importadas com sucesso!`);
+    e.target.value = '';
     await loadDashboard();
   } catch (error) {
-    console.error('Error adding account:', error);
-    showError('Erro ao adicionar conta');
+    console.error('Error importing CSV:', error);
+    showToast('Erro ao importar CSV. Verifique o formato do arquivo.', 'error');
   }
+});
+
+document.getElementById('exportCsvBtn').addEventListener('click', () => {
+  if (transactions.length === 0) {
+    showToast('Nenhuma transação para exportar', 'error');
+    return;
+  }
+  
+  // Header
+  let csv = 'date,description,amount,type,category,account\n';
+  
+  // Data
+  transactions.forEach(tx => {
+    const desc = `"${tx.description.replace(/"/g, '""')}"`;
+    const cat = `"${tx.category_name || ''}"`;
+    const acc = `"${tx.account_name || ''}"`;
+    csv += `${tx.date},${desc},${tx.amount},${tx.type},${cat},${acc}\n`;
+  });
+  
+  // Download
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  link.setAttribute('href', url);
+  link.setAttribute('download', `hub_financeiro_${new Date().toISOString().split('T')[0]}.csv`);
+  link.click();
+  URL.revokeObjectURL(url);
+  
+  showToast('✅ CSV exportado com sucesso!');
 });
 
 // ========== FILTER ==========
@@ -489,3 +911,14 @@ document.getElementById('filterType').addEventListener('change', async (e) => {
 window.onload = () => {
   checkAuth();
 };
+
+// Make functions global for onclick handlers
+window.openAccountModal = openAccountModal;
+window.openEditAccount = openEditAccount;
+window.closeAccountModal = closeAccountModal;
+window.openBudgetModal = openBudgetModal;
+window.closeBudgetModal = closeBudgetModal;
+window.saveBudget = saveBudget;
+window.openEditTransaction = openEditTransaction;
+window.closeTransactionModal = closeTransactionModal;
+window.deleteTransaction = deleteTransaction;
