@@ -335,4 +335,31 @@ MIT License - Use como quiser! 🎉
 
 **URL de Acesso**: https://3000-i8hjae221su2mndj8qpz9-dfc00ec5.sandbox.novita.ai
 
-**Versão**: 2.0 - Agora com IA de Entrada Rápida! 🤖✨
+**Versão**: 2.1 - Agora com IA de Entrada Rápida! 🤖✨
+
+---
+
+## 🐛 Correções da v2.1
+
+### ✅ Problemas Corrigidos:
+1. **CSV Import corrigido** - Agora importa corretamente com parse robusto
+2. **Persistência de login** - F5 não desloga mais (token mantido)
+3. **Categorização automática expandida** - 100+ palavras-chave para melhor reconhecimento
+
+### 🎯 Palavras-Chave Adicionadas:
+- **Alimentação**: +30 termos (rappi, uber eats, mcdonalds, sushi, etc)
+- **Mercado**: +15 termos (walmart, sams, feira, hortifruti, etc)
+- **Transporte**: +20 termos (99pop, cabify, posto, estacionamento, etc)
+- **Saúde**: +25 termos (drogaria, unimed, amil, genérico, etc)
+- **Moradia**: +20 termos (cemig, enel, sabesp, iptu, etc)
+- **E muito mais!**
+
+### 📋 Arquivo CSV de Exemplo:
+Incluído no projeto: `exemplo_importacao.csv`
+
+```csv
+date,description,amount,type,category,account
+2024-01-15,"Mercado Assaí",-320.50,expense,Mercado,Nubank
+2024-01-16,"iFood",-42.90,expense,Alimentação,Nubank
+2024-01-20,"Salário",8500,income,Salário,BB
+```
