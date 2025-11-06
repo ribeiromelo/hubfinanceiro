@@ -314,6 +314,7 @@ curl -X POST http://localhost:3000/api/transactions \
 ✅ **CSV Import** - Parser robusto com valores entre aspas
 ✅ **Password Strength** - Indicador visual em tempo real
 ✅ **Categorização Automática** - 100+ palavras-chave mapeadas
+✅ **Login não redirecionava** - Fix: Adicionar import de `verifyToken` em auth.ts
 
 ## 📝 Próximos Passos Recomendados
 
