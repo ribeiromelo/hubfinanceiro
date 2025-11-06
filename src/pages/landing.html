@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hub Financeiro Pro - Controle suas finanças com inteligência</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    
+    .gradient-pink {
+      background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+    }
+    
+    .gradient-purple {
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    }
+    
+    .gradient-blue {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-gradient {
+      background: linear-gradient(135deg, #fdf2f8 0%, #f3e8ff 100%);
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .fade-in-up {
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body class="bg-white">
+
+  <!-- Navigation -->
+  <nav class="fixed w-full top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 gradient-pink rounded-full flex items-center justify-center">
+            <i class="fas fa-wallet text-white text-lg"></i>
+          </div>
+          <span class="text-xl font-bold text-gray-800">Hub Financeiro Pro</span>
+        </div>
+        
+        <div class="flex items-center space-x-3">
+          <a href="/login" class="px-4 py-2 text-gray-700 hover:text-pink-600 font-medium transition">
+            Login
+          </a>
+          <a href="/registro" class="px-6 py-2 gradient-pink text-white rounded-lg font-semibold hover:opacity-90 transition">
+            Começar Grátis
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-gradient pt-24 pb-20 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="fade-in-up">
+          <h1 class="text-5xl lg:text-6xl font-black text-gray-900 mb-6 leading-tight">
+            Controle suas <span class="gradient-text">finanças</span> com inteligência
+          </h1>
+          <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+            Gerencie receitas, despesas, contas e orçamentos em um só lugar. 
+            Com entrada rápida inteligente e análises visuais poderosas.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/registro" class="px-8 py-4 gradient-pink text-white rounded-xl font-bold text-lg hover:opacity-90 transition shadow-lg text-center">
+              <i class="fas fa-rocket mr-2"></i>
+              Criar Conta Grátis
+            </a>
+            <a href="#features" class="px-8 py-4 border-2 border-pink-600 text-pink-600 rounded-xl font-bold text-lg hover:bg-pink-50 transition text-center">
+              <i class="fas fa-play-circle mr-2"></i>
+              Conhecer Recursos
+            </a>
+          </div>
+          
+          <div class="mt-8 flex items-center space-x-6 text-sm text-gray-600">
+            <div class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>
+              Grátis para sempre
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>
+              Sem cartão de crédito
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>
+              Setup em 2 minutos
+            </div>
+          </div>
+        </div>
+        
+        <div class="float-animation">
+          <div class="bg-white rounded-2xl shadow-2xl p-8">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                <div>
+                  <p class="text-sm text-green-600 font-medium">Receitas</p>
+                  <p class="text-2xl font-bold text-green-700">R$ 8.500,00</p>
+                </div>
+                <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                  <i class="fas fa-arrow-up text-white"></i>
+                </div>
+              </div>
+              
+              <div class="flex items-center justify-between p-4 bg-red-50 rounded-lg">
+                <div>
+                  <p class="text-sm text-red-600 font-medium">Despesas</p>
+                  <p class="text-2xl font-bold text-red-700">R$ 3.240,00</p>
+                </div>
+                <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
+                  <i class="fas fa-arrow-down text-white"></i>
+                </div>
+              </div>
+              
+              <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+                <div>
+                  <p class="text-sm text-blue-600 font-medium">Saldo</p>
+                  <p class="text-2xl font-bold text-blue-700">R$ 5.260,00</p>
+                </div>
+                <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                  <i class="fas fa-wallet text-white"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-20 px-4 bg-white">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-black text-gray-900 mb-4">
+          Recursos <span class="gradient-text">Poderosos</span>
+        </h2>
+        <p class="text-xl text-gray-600">
+          Tudo que você precisa para controlar suas finanças pessoais
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="p-6 bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl card-hover">
+          <div class="w-16 h-16 gradient-pink rounded-2xl flex items-center justify-center mb-4">
+            <i class="fas fa-magic text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Entrada Rápida Inteligente</h3>
+          <p class="text-gray-600">
+            Digite naturalmente como "50 mercado" ou "8500 salário" e a IA categoriza automaticamente com 100+ palavras-chave.
+          </p>
+        </div>
+        
+        <!-- Feature 2 -->
+        <div class="p-6 bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl card-hover">
+          <div class="w-16 h-16 gradient-purple rounded-2xl flex items-center justify-center mb-4">
+            <i class="fas fa-chart-pie text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Orçamentos Inteligentes</h3>
+          <p class="text-gray-600">
+            Configure limites por categoria e receba alertas visuais quando estiver próximo de estourar o orçamento.
+          </p>
+        </div>
+        
+        <!-- Feature 3 -->
+        <div class="p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl card-hover">
+          <div class="w-16 h-16 gradient-blue rounded-2xl flex items-center justify-center mb-4">
+            <i class="fas fa-university text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Múltiplas Contas</h3>
+          <p class="text-gray-600">
+            Gerencie contas bancárias, cartões de crédito e carteiras. Acompanhe limites, fechamentos e vencimentos.
+          </p>
+        </div>
+        
+        <!-- Feature 4 -->
+        <div class="p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl card-hover">
+          <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-4">
+            <i class="fas fa-chart-line text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Análises Visuais</h3>
+          <p class="text-gray-600">
+            Gráficos dinâmicos de gastos por categoria, evolução mensal e indicadores financeiros em tempo real.
+          </p>
+        </div>
+        
+        <!-- Feature 5 -->
+        <div class="p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl card-hover">
+          <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-4">
+            <i class="fas fa-file-csv text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Importar/Exportar CSV</h3>
+          <p class="text-gray-600">
+            Importe transações em massa via CSV e exporte seus dados a qualquer momento para backup ou análise.
+          </p>
+        </div>
+        
+        <!-- Feature 6 -->
+        <div class="p-6 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl card-hover">
+          <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-4">
+            <i class="fas fa-lock text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Segurança Avançada</h3>
+          <p class="text-gray-600">
+            Autenticação JWT, senha com validação de força, dados criptografados e persistência de sessão segura.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="py-20 px-4 bg-gradient-to-br from-gray-50 to-gray-100">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-black text-gray-900 mb-4">
+          Como <span class="gradient-text">Funciona</span>
+        </h2>
+        <p class="text-xl text-gray-600">
+          Comece a controlar suas finanças em 3 passos simples
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-12">
+        <div class="text-center">
+          <div class="w-20 h-20 gradient-pink rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-3xl font-black text-white">1</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-3">Crie sua Conta</h3>
+          <p class="text-gray-600">
+            Cadastre-se gratuitamente em menos de 1 minuto. Sem cartão de crédito, sem complicação.
+          </p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-20 h-20 gradient-purple rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-3xl font-black text-white">2</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-3">Configure suas Contas</h3>
+          <p class="text-gray-600">
+            Adicione suas contas bancárias, cartões e defina orçamentos por categoria em segundos.
+          </p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-20 h-20 gradient-blue rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-3xl font-black text-white">3</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-3">Comece a Lançar</h3>
+          <p class="text-gray-600">
+            Use a entrada rápida inteligente e veja suas finanças organizadas em tempo real!
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 px-4 bg-white">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-4xl lg:text-5xl font-black text-gray-900 mb-6">
+        Pronto para transformar suas <span class="gradient-text">finanças?</span>
+      </h2>
+      <p class="text-xl text-gray-600 mb-8">
+        Junte-se a milhares de pessoas que já estão no controle do seu dinheiro
+      </p>
+      
+      <a href="/registro" class="inline-block px-12 py-5 gradient-pink text-white rounded-xl font-bold text-xl hover:opacity-90 transition shadow-2xl">
+        <i class="fas fa-rocket mr-2"></i>
+        Criar Conta Grátis Agora
+      </a>
+      
+      <p class="mt-6 text-sm text-gray-500">
+        Sem cartão de crédito • Grátis para sempre • Setup em 2 minutos
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <div class="flex items-center space-x-3 mb-4">
+            <div class="w-10 h-10 gradient-pink rounded-full flex items-center justify-center">
+              <i class="fas fa-wallet text-white"></i>
+            </div>
+            <span class="text-xl font-bold">Hub Financeiro Pro</span>
+          </div>
+          <p class="text-gray-400 text-sm">
+            Controle suas finanças com inteligência e simplicidade.
+          </p>
+        </div>
+        
+        <div>
+          <h4 class="font-bold mb-4">Produto</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#features" class="hover:text-white transition">Recursos</a></li>
+            <li><a href="/login" class="hover:text-white transition">Login</a></li>
+            <li><a href="/registro" class="hover:text-white transition">Criar Conta</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="font-bold mb-4">Recursos</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white transition">Entrada Rápida</a></li>
+            <li><a href="#" class="hover:text-white transition">Orçamentos</a></li>
+            <li><a href="#" class="hover:text-white transition">Análises</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="font-bold mb-4">Social</h4>
+          <div class="flex space-x-4">
+            <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-pink-600 transition">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-pink-600 transition">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-pink-600 transition">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
+        <p>&copy; 2024 Hub Financeiro Pro. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

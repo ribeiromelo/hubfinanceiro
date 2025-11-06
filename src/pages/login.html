@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Hub Financeiro Pro</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    
+    .gradient-pink {
+      background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+    }
+    
+    .spinner {
+      border: 3px solid #f3f4f6;
+      border-top: 3px solid #ec4899;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen flex items-center justify-center p-4">
+
+  <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 fade-in">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <a href="/" class="inline-flex items-center space-x-2 mb-4 text-gray-600 hover:text-pink-600 transition">
+        <i class="fas fa-arrow-left"></i>
+        <span>Voltar</span>
+      </a>
+      
+      <div class="w-16 h-16 gradient-pink rounded-full flex items-center justify-center mx-auto mb-4">
+        <i class="fas fa-sign-in-alt text-white text-2xl"></i>
+      </div>
+      <h1 class="text-3xl font-bold text-gray-800">Entrar</h1>
+      <p class="text-gray-600 mt-2">Acesse sua conta e controle suas finanças</p>
+    </div>
+    
+    <!-- Login Form -->
+    <form id="loginForm" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          <i class="fas fa-envelope mr-1"></i>
+          Email
+        </label>
+        <input type="email" id="loginEmail" required
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+          placeholder="seu@email.com">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          <i class="fas fa-lock mr-1"></i>
+          Senha
+        </label>
+        <input type="password" id="loginPassword" required
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+          placeholder="••••••••">
+      </div>
+      <button type="submit" class="w-full gradient-pink text-white font-semibold py-3 rounded-lg hover:opacity-90 transition">
+        <i class="fas fa-sign-in-alt mr-2"></i>
+        Entrar
+      </button>
+    </form>
+    
+    <div id="authError" class="hidden mt-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm"></div>
+    
+    <div class="mt-6 text-center">
+      <p class="text-sm text-gray-600">
+        Não tem uma conta? 
+        <a href="/registro" class="text-pink-600 hover:text-pink-700 font-semibold">
+          Criar conta grátis
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <script src="/static/login.js"></script>
+</body>
+</html>

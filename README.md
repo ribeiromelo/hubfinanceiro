@@ -1,394 +1,379 @@
-# 💰 Hub Financeiro Pro v2.0
+# 💰 Hub Financeiro Pro
 
-Um sistema completo de gestão financeira pessoal com autenticação segura, banco de dados em nuvem, IA de entrada rápida e interface moderna.
+Sistema completo de gestão financeira pessoal com entrada rápida inteligente, orçamentos automáticos e análises visuais.
 
-## 🎯 Funcionalidades Implementadas
+## 🌟 Status do Projeto
 
-### ✅ Sistema de Autenticação
-- 🔐 **Registro de usuários** com validação de email e senha
-- 🔑 **Login seguro** com JWT (JSON Web Tokens)
-- 🔒 **Proteção de dados** com hash de senha SHA-256
-- 👤 **Multi-usuário** - cada pessoa tem seus próprios dados isolados
+✅ **Funcional e Pronto para Uso**
 
-### 🤖 Entrada Rápida Inteligente (NEW!)
-- ✨ **IA que entende linguagem natural**: Digite naturalmente como "50 mercado", "-120 gasolina nubank", "8500 salário BB"
-- 🧠 **Detecção automática de tipo**: Valores negativos viram despesas automaticamente
-- 🏷️ **Categorização inteligente**: Reconhece palavras-chave (ifood → Alimentação, uber → Transporte)
-- 💳 **Identificação de contas**: Detecta Nubank, BB, Inter, Itaú, etc.
-- ⚡ **Super rápido**: Basta digitar e apertar Enter
+- ✅ Landing Page explicativa
+- ✅ Sistema de autenticação completo (Login/Registro)
+- ✅ Dashboard interativo com KPIs
+- ✅ Entrada rápida inteligente com 100+ palavras-chave
+- ✅ Gestão de contas e cartões
+- ✅ Orçamentos por categoria
+- ✅ Gráficos e análises em tempo real
+- ✅ Import/Export CSV
+- ✅ Persistência de sessão (sobrevive a F5)
+- ✅ Rotas separadas e protegidas
 
-**Exemplos de entrada:**
-- `50 mercado` → Despesa de R$ 50,00 em Mercado
-- `-120 gasolina nubank` → Despesa de R$ 120,00 em Transporte, cartão Nubank
-- `8500 salário` → Receita de R$ 8.500,00 em Salário
-- `42.90 ifood` → Despesa de R$ 42,90 em Alimentação
+## 🚀 URLs do Projeto
 
-### 💳 Gestão de Contas (MELHORADO!)
-- ✏️ **Edição completa** com modals estilizados (sem popups feios do navegador!)
-- 💰 **Contas bancárias** editáveis (nome, saldo)
-- 💳 **Cartões de crédito** configuráveis (limite, fechamento, vencimento)
-- 🎨 **Cards modernos** com ícones e gradientes
-- 🔄 **Atualização em tempo real** dos saldos
+### Ambiente de Desenvolvimento
+- **Landing Page**: https://3000-i8hjae221su2mndj8qpz9-dfc00ec5.sandbox.novita.ai/
+- **Login**: https://3000-i8hjae221su2mndj8qpz9-dfc00ec5.sandbox.novita.ai/login
+- **Registro**: https://3000-i8hjae221su2mndj8qpz9-dfc00ec5.sandbox.novita.ai/registro
+- **Dashboard**: https://3000-i8hjae221su2mndj8qpz9-dfc00ec5.sandbox.novita.ai/principal
 
-### 📊 Controle de Transações (MELHORADO!)
-- ➕ **Entrada rápida inteligente** com IA
-- ✏️ **Edição de transações** (modal estilizado)
-- 🗑️ **Exclusão rápida** com confirmação
-- 🏷️ **Categorização automática** com ícones e cores
-- 📅 **Filtros por data** (mensal)
-- 🔍 **Filtros por tipo** (receita/despesa)
+### Produção (Cloudflare Pages)
+- Aguardando deploy
 
-### 🎯 Gerenciamento de Orçamentos (NEW!)
-- 💰 **Configurar orçamento** para cada categoria
-- 📊 **Acompanhamento visual** com barras de progresso
-- 🔴 **Alertas visuais** quando ultrapassa 100%
-- ✏️ **Modal dedicado** para gerenciar todos os orçamentos
-- 💾 **Salvamento individual** por categoria
+## 🎯 Funcionalidades
 
-### 📤 Importar/Exportar CSV (NEW!)
-- 📥 **Importação em massa** de transações via CSV
-- 📤 **Exportação completa** para backup
-- 📋 **Formato padrão**: `date,description,amount,type,category,account`
-- 🔄 **Compatível com Excel** e Google Sheets
+### 🏠 Landing Page
+- Design moderno e responsivo
+- Explicação clara das funcionalidades
+- Call-to-actions para Login e Registro
+- Seções: Hero, Recursos, Como Funciona, CTA Final
 
-### 📈 Dashboard Inteligente
-- 💵 **KPIs em tempo real**: Receitas, Despesas, Saldo, % Gasto
-- 📊 **Gráfico de pizza** mostrando despesas por categoria
-- 🎯 **Orçamentos por categoria** com barras de progresso
-- 🔴 **Alertas visuais** quando ultrapassa orçamento
+### 🔐 Autenticação
+- **Registro** com validação de força de senha visual
+- **Login** com JWT (7 dias de validade)
+- **Persistência** de sessão no localStorage
+- **Proteção** de rotas (redirect automático)
+- Indicador visual de força da senha em tempo real
 
-### 🎨 Design Moderno Premium
-- 🌈 **Modals estilizados** (sem popups do navegador!)
-- 📱 **Responsivo** (funciona em desktop, tablet e mobile)
-- ⚡ **Animações suaves** e transições fluidas
-- 🎨 **Cores vibrantes** para cada categoria
-- 🍞 **Toast notifications** para feedback instantâneo
-- 💎 **Glass effects** e backdrop blur
+### 📊 Dashboard (Rota: `/principal`)
 
-## 🌐 URLs de Acesso
+**KPIs Principais:**
+- 💚 Receitas do mês
+- 💸 Despesas do mês
+- 💰 Saldo (Receitas - Despesas)
+- 📊 % Gasto da renda
 
-### 🚀 Aplicação em Produção (Sandbox)
-**URL Pública**: https://3000-i8hjae221su2mndj8qpz9-dfc00ec5.sandbox.novita.ai
+**Recursos:**
+- ✨ Entrada Rápida Inteligente com IA
+- 🏦 Gestão de Contas Bancárias e Cartões
+- 📈 Gráfico de Despesas por Categoria (Chart.js)
+- 🎯 Orçamentos com Alertas Visuais
+- 📋 Tabela de Transações com Filtros
+- ✏️ Edição de Contas e Transações (modais estilizados)
+- 📥 Import/Export CSV
 
-### 📡 Endpoints da API
-- `POST /api/auth/register` - Criar nova conta
-- `POST /api/auth/login` - Fazer login
-- `GET /api/auth/me` - Dados do usuário autenticado
-- `GET /api/accounts` - Listar contas
-- `POST /api/accounts` - Criar conta
-- `PUT /api/accounts/:id` - Atualizar conta
-- `DELETE /api/accounts/:id` - Excluir conta
-- `GET /api/categories` - Listar categorias
-- `PUT /api/categories/:id` - Atualizar categoria (orçamento)
-- `GET /api/transactions` - Listar transações
-- `POST /api/transactions` - Criar transação
-- `PUT /api/transactions/:id` - Atualizar transação
-- `DELETE /api/transactions/:id` - Excluir transação
-- `GET /api/transactions/stats` - Estatísticas (KPIs)
+## 🧠 Entrada Rápida Inteligente
 
-## 🚀 Como Usar
-
-### 1️⃣ Primeiro Acesso
-1. Acesse a URL: https://3000-i8hjae221su2mndj8qpz9-dfc00ec5.sandbox.novita.ai
-2. Clique em **"Cadastro"**
-3. Preencha: Nome, Email, Senha (mínimo 6 caracteres)
-4. Clique em **"Criar conta"**
-
-### 2️⃣ Adicionar uma Conta
-1. Clique no botão **"+ Nova Conta"** (card "Contas & Cartões")
-2. Preencha:
-   - Nome (ex: "Nubank", "Banco do Brasil")
-   - Tipo: Conta Bancária ou Cartão de Crédito
-   - Saldo inicial (ou limite do cartão)
-   - Se cartão: dia de fechamento e vencimento
-3. Clique em **"Salvar"**
-
-### 3️⃣ Usar Entrada Rápida Inteligente ⭐
-**Esta é a forma mais rápida!** Digite naturalmente:
+Digite naturalmente e o sistema entende automaticamente:
 
 ```
-50 mercado              → R$ 50,00 em Mercado
--120 gasolina           → R$ 120,00 em Transporte
-35 ifood                → R$ 35,00 em Alimentação
-8500 salário BB         → R$ 8.500,00 receita no BB
-49.90 netflix           → R$ 49,90 em Assinaturas
+"50 mercado" → Despesa R$50 na categoria Mercado
+"-120 gasolina nubank" → Despesa R$120 em Transporte via Nubank
+"8500 salário" → Receita R$8.500 em Salário
+"35 ifood" → Despesa R$35 em Alimentação
 ```
 
-A IA entende:
-- ✅ Valores com ou sem R$
-- ✅ Negativos como despesas
-- ✅ Vírgula ou ponto
-- ✅ Nomes de contas (Nubank, BB, Inter)
-- ✅ Categorias automáticas (mercado, ifood, uber)
+**100+ Palavras-chave Categorizadas:**
+- 🍔 Alimentação: ifood, rappi, restaurante, pizza, café, etc.
+- 🛒 Mercado: carrefour, extra, assaí, feira, etc.
+- 🚗 Transporte: uber, 99, gasolina, ipva, etc.
+- 💊 Saúde: farmácia, médico, plano de saúde, etc.
+- 📺 Assinaturas: netflix, spotify, prime, etc.
+- 🏠 Moradia: aluguel, luz, água, internet, etc.
+- 📚 Educação: curso, faculdade, livro, etc.
+- 🎬 Lazer: cinema, viagem, show, etc.
 
-### 4️⃣ Configurar Orçamentos
-1. Clique no botão **"Orçamentos"** no topo
-2. Para cada categoria, defina o valor mensal
-3. Clique no ícone de **salvar** ao lado
-4. Acompanhe visualmente o quanto já gastou
+## 🏗️ Arquitetura do Projeto
 
-### 5️⃣ Editar Contas e Transações
-- **Contas**: Clique no ícone de editar no card da conta
-- **Transações**: Clique no ícone de editar na tabela
-- Tudo com modals bonitos e modernos!
+### 📁 Estrutura de Páginas (Separadas)
 
-### 6️⃣ Importar Transações de CSV
-1. Prepare arquivo CSV com formato:
-   ```csv
-   date,description,amount,type,category,account
-   2024-01-15,"Mercado","-120.50","expense","Mercado","Nubank"
-   2024-01-20,"Salário","8500","income","Salário","BB"
-   ```
-2. Clique em **"Importar CSV"**
-3. Selecione o arquivo
-4. Pronto! Transações importadas automaticamente
+```
+/                    → Landing Page (pública)
+/login               → Login (pública)
+/registro            → Registro (pública)
+/principal           → Dashboard (protegida, requer token)
+```
 
-### 7️⃣ Exportar para Backup
-1. Clique em **"Exportar CSV"**
-2. Arquivo baixado automaticamente
-3. Use para backup ou análise em Excel
+### 📂 Estrutura de Arquivos
 
-## 🏗️ Arquitetura Técnica
+```
+webapp/
+├── src/
+│   ├── index.tsx           # Servidor Hono com rotas
+│   ├── htmlLoader.ts       # Carregador de HTMLs
+│   ├── types/              # TypeScript types
+│   ├── routes/             # Rotas de API
+│   │   ├── auth.ts         # Autenticação (login/register)
+│   │   ├── accounts.ts     # Contas bancárias/cartões
+│   │   ├── categories.ts   # Categorias de transações
+│   │   └── transactions.ts # Transações financeiras
+│   └── pages/              # Páginas HTML (source)
+│       ├── landing.html    # Landing Page
+│       ├── login.html      # Página de Login
+│       ├── register.html   # Página de Registro
+│       └── dashboard.html  # Dashboard
+├── public/
+│   ├── pages/              # Páginas HTML (build)
+│   └── static/             # JavaScript e CSS
+│       ├── login.js        # Lógica do Login
+│       ├── register.js     # Lógica do Registro
+│       ├── dashboard.js    # Lógica do Dashboard
+│       └── style.css       # Estilos customizados
+├── migrations/             # Migrações D1 Database
+│   └── 0001_initial_schema.sql
+├── wrangler.toml           # Configuração Cloudflare
+├── package.json            # Dependências e scripts
+├── ecosystem.config.cjs    # Configuração PM2
+└── README.md               # Este arquivo
+```
 
-### Backend
-- ⚡ **Hono Framework** - Framework web ultra-rápido para Cloudflare Workers
-- 💾 **Cloudflare D1** - Banco de dados SQLite distribuído globalmente
-- 🔐 **JWT Authentication** - Autenticação stateless com tokens
-- 🌐 **RESTful API** - APIs bem estruturadas e documentadas
+## 🗄️ Banco de Dados (Cloudflare D1)
 
-### Frontend
-- 🎨 **Tailwind CSS** - Framework CSS utility-first
-- 📊 **Chart.js** - Biblioteca de gráficos interativos
-- 🔌 **Axios** - Cliente HTTP para comunicação com API
-- 🤖 **Smart Parser** - IA de processamento de linguagem natural
-- ✨ **Vanilla JavaScript** - Performance máxima sem frameworks pesados
+### Tabelas
 
-### Banco de Dados
-**Tabelas principais:**
-- `users` - Usuários do sistema
-- `accounts` - Contas bancárias e cartões
-- `categories` - Categorias de transações (com orçamentos)
-- `transactions` - Todas as transações financeiras
+**users** - Usuários do sistema
+- id, email, password (hash SHA-256), name, created_at
 
-## 🆕 O Que Há de Novo na v2.0
+**accounts** - Contas e Cartões
+- id, user_id, name, type (account/card), balance
+- card_limit, card_closing_day, card_due_day
 
-### 🎉 Novas Funcionalidades
-1. **🤖 Entrada Rápida Inteligente**
-   - Parse de linguagem natural
-   - Detecção automática de tipo, categoria e conta
-   - Interface super rápida (apenas digite e Enter)
+**categories** - Categorias de Transações
+- id, user_id, name, icon, color, budget_limit
 
-2. **✏️ Modals Estilizados**
-   - Editação de contas com modal bonito
-   - Editação de transações visual
-   - Sem popups feios do navegador!
+**transactions** - Transações Financeiras
+- id, user_id, account_id, category_id
+- type (income/expense), amount, description, date, tags
 
-3. **🎯 Gerenciamento de Orçamentos**
-   - Modal dedicado para configurar orçamentos
-   - Salvamento individual por categoria
-   - Alertas visuais de ultrapassagem
-
-4. **📤 CSV Import/Export**
-   - Importação em massa
-   - Exportação completa
-   - Formato compatível com Excel
-
-5. **🍞 Toast Notifications**
-   - Feedback visual instantâneo
-   - Animações suaves
-   - Ícones contextuais
-
-### 🎨 Melhorias de UI/UX
-- Cards de contas clicáveis para edição
-- Ícones de ação nas transações
-- Tooltips informativos
-- Animações de slide-up nos modals
-- Backdrop blur nos overlays
-- Gradientes modernos nos botões
-
-## 🎯 Próximos Passos Recomendados
-
-### Features Futuras
-1. 📱 **App mobile** (PWA)
-2. 📧 **Recuperação de senha** via email
-3. 📊 **Relatórios PDF** exportáveis
-4. 🔔 **Notificações push** quando atingir 80% do orçamento
-5. 📈 **Gráficos de linha** (evolução temporal)
-6. 🔄 **Transações recorrentes** (assinaturas, contas fixas)
-7. 💱 **Multi-moeda** (dólar, euro, etc)
-8. 👥 **Compartilhamento** de contas com família
-9. 🏦 **Integração bancária** (Open Banking)
-10. 🤖 **IA para sugestões** de economia
-
-### Melhorias Técnicas
-- ⚡ Implementar **cache** para queries frequentes
-- 🔒 Usar **bcrypt/argon2** para hash de senha
-- 📊 **Pagination** para lista de transações
-- 🔍 **Busca avançada** com múltiplos filtros
-- 🌙 **Modo escuro** (dark mode)
-- 🎨 **Temas personalizáveis**
-- 📊 **Dashboard personalizável**
-
-## 🔐 Segurança
-
-- ✅ **Senhas com hash** SHA-256
-- ✅ **JWT tokens** com expiração de 7 dias
-- ✅ **CORS configurado** para segurança de API
-- ✅ **Validação de entrada** em todas as rotas
-- ✅ **SQL Injection** protegido (prepared statements)
-- ✅ **Dados isolados** por usuário (user_id em todas queries)
-
-## 📝 Status do Projeto
-
-✅ **PRONTO PARA USO - VERSÃO 2.0!**
-
-### ✨ Novidades da v2.0:
-- ✅ Entrada rápida inteligente com IA
-- ✅ Modals estilizados (sem popups do navegador)
-- ✅ Edição completa de contas e transações
-- ✅ Gerenciamento de orçamentos
-- ✅ Importação/Exportação CSV
-- ✅ Toast notifications
-- ✅ Interface ainda mais polida
-
-### O que está funcionando:
-- ✅ Autenticação completa (registro + login)
-- ✅ CRUD completo de contas e cartões
-- ✅ CRUD completo de transações
-- ✅ Entrada rápida inteligente (AI-powered)
-- ✅ Dashboard com KPIs e gráficos
-- ✅ Gerenciamento de orçamentos
-- ✅ CSV Import/Export
-- ✅ Interface responsiva e premium
-
-## 🚀 Deploy para Produção Cloudflare
-
-Para fazer deploy permanente:
+### Desenvolvimento Local (--local)
 
 ```bash
-# 1. Criar banco D1 de produção
+# Aplicar migrações localmente
+npm run db:migrate:local
+
+# Resetar banco local
+npm run db:reset
+
+# Inserir dados de teste
+npm run db:seed
+```
+
+## 🛠️ Stack Tecnológica
+
+### Backend
+- **Hono** v4 - Web framework ultrarrápido para Cloudflare Workers
+- **Cloudflare D1** - Banco de dados SQLite distribuído
+- **JWT** - Autenticação via tokens (7 dias de expiração)
+- **Web Crypto API** - SHA-256 para hash de senhas
+
+### Frontend
+- **TailwindCSS** - Framework CSS utilitário (via CDN)
+- **Chart.js** - Gráficos interativos
+- **Axios** - Cliente HTTP
+- **Font Awesome** - Ícones
+- **Vanilla JavaScript** - Sem frameworks, código limpo
+
+### DevOps
+- **Wrangler** - CLI do Cloudflare
+- **PM2** - Gerenciador de processos Node.js
+- **Vite** - Build tool
+- **TypeScript** - Tipagem estática
+
+## 📦 Instalação e Desenvolvimento
+
+### Pré-requisitos
+- Node.js 18+
+- npm ou yarn
+- Conta Cloudflare (para deploy)
+
+### Setup Local
+
+```bash
+# 1. Instalar dependências
+cd /home/user/webapp
+npm install
+
+# 2. Criar banco de dados local
+npm run db:migrate:local
+npm run db:seed
+
+# 3. Build do projeto
+npm run build
+
+# 4. Iniciar servidor de desenvolvimento com PM2
+pm2 start ecosystem.config.cjs
+
+# 5. Verificar logs
+pm2 logs webapp --nostream
+
+# 6. Testar localmente
+curl http://localhost:3000/
+```
+
+### Scripts Disponíveis
+
+```json
+{
+  "dev": "vite",
+  "dev:sandbox": "wrangler pages dev dist --ip 0.0.0.0 --port 3000",
+  "dev:d1": "wrangler pages dev dist --d1=webapp-production --local --ip 0.0.0.0 --port 3000",
+  "build": "vite build",
+  "preview": "wrangler pages dev dist",
+  "deploy": "npm run build && wrangler pages deploy dist",
+  "db:migrate:local": "wrangler d1 migrations apply webapp-production --local",
+  "db:migrate:prod": "wrangler d1 migrations apply webapp-production",
+  "db:seed": "wrangler d1 execute webapp-production --local --file=./seed.sql",
+  "db:reset": "rm -rf .wrangler/state/v3/d1 && npm run db:migrate:local && npm run db:seed",
+  "clean-port": "fuser -k 3000/tcp 2>/dev/null || true",
+  "test": "curl http://localhost:3000"
+}
+```
+
+## 🚀 Deploy para Cloudflare Pages
+
+### Configuração Inicial
+
+```bash
+# 1. Setup da API Key do Cloudflare (necessário uma vez)
+# Vá até: Deploy tab → Configure Cloudflare API Key
+
+# 2. Criar banco D1 de produção
 npx wrangler d1 create webapp-production
 
-# 2. Copiar o database_id para wrangler.toml
+# 3. Atualizar wrangler.toml com o database_id retornado
 
-# 3. Aplicar migrations
+# 4. Aplicar migrações no banco de produção
 npm run db:migrate:prod
-
-# 4. Deploy
-npm run deploy:prod
 ```
 
-## 📱 Screenshots
+### Deploy
 
-### Tela de Login/Registro
-- Design moderno com gradientes
-- Animações suaves
-- Formulários validados
+```bash
+# Build e Deploy
+npm run deploy
 
-### Dashboard Principal
-- KPIs em cards coloridos
-- Gráfico de pizza interativo
-- Orçamentos com barras de progresso
-- Entrada rápida inteligente no topo
-
-### Modals Estilizados
-- Adicionar/Editar contas
-- Editar transações
-- Gerenciar orçamentos
-- Animações slide-up
-
-### Tabela de Transações
-- Categorias com cores
-- Ações de edição/exclusão
-- Filtros por tipo
-- Responsiva
-
-## 📄 Formato CSV para Importação
-
-```csv
-date,description,amount,type,category,account
-2024-01-15,"Mercado Assaí","-320.50","expense","Mercado","Nubank"
-2024-01-16,"iFood","-42.90","expense","Alimentação","Nubank"
-2024-01-20,"Salário","8500","income","Salário","BB"
-2024-01-22,"Gasolina","-210","expense","Transporte","BB"
+# Ou manual
+npm run build
+npx wrangler pages deploy dist --project-name webapp
 ```
 
-**Campos:**
-- `date`: Formato YYYY-MM-DD
-- `description`: Texto livre (entre aspas se tiver vírgula)
-- `amount`: Número (negativo para despesa)
-- `type`: "income" ou "expense"
-- `category`: Nome da categoria (deve existir)
-- `account`: Nome da conta (deve existir)
+### Após o Deploy
 
-## 🤝 Contribuindo
+URLs Geradas:
+- **Produção**: `https://webapp.pages.dev`
+- **Branch**: `https://main.webapp.pages.dev`
 
-Este é um projeto pessoal, mas sugestões são bem-vindas!
+## 🧪 Testando o Sistema
+
+### 1. Criar Conta
+```bash
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"João Silva","email":"joao@example.com","password":"Senha123!@#"}'
+```
+
+### 2. Login
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"joao@example.com","password":"Senha123!@#"}'
+```
+
+### 3. Criar Transação
+```bash
+curl -X POST http://localhost:3000/api/transactions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer SEU_TOKEN" \
+  -d '{"type":"expense","amount":50,"description":"Mercado","account_id":1,"category_id":2,"date":"2024-11-06"}'
+```
+
+## 🔒 Segurança
+
+- ✅ Senhas hasheadas com SHA-256
+- ✅ JWT com expiração de 7 dias
+- ✅ Validação de força de senha (visual)
+- ✅ Proteção de rotas no cliente e servidor
+- ✅ CORS configurado para APIs
+- ✅ Headers de autenticação Bearer
+- ✅ Validação de inputs
+
+## 🎨 Design
+
+- Interface moderna e limpa
+- Gradientes vibrantes (Pink, Purple, Blue)
+- Animações suaves (fade-in, slide-up)
+- Responsivo (mobile-first)
+- Cards com hover effects
+- Modais estilizados (sem prompts do navegador)
+- Toast notifications
+- Loading states
+
+## 🐛 Problemas Resolvidos
+
+✅ **F5 Logout Issue** - Implementadas rotas separadas com persistência de token
+✅ **SPA Single Page** - Migrado para arquitetura multi-página
+✅ **Edição de Contas/Transações** - Fix `undefined → null` para D1
+✅ **CSV Import** - Parser robusto com valores entre aspas
+✅ **Password Strength** - Indicador visual em tempo real
+✅ **Categorização Automática** - 100+ palavras-chave mapeadas
+
+## 📝 Próximos Passos Recomendados
+
+### Features Prioritárias
+1. **Relatórios** - Exportar PDFs com análises mensais
+2. **Metas Financeiras** - Definir e acompanhar metas
+3. **Gráfico de Evolução** - Timeline de saldo ao longo do tempo
+4. **Notificações** - Alertas de orçamento estourado
+5. **Filtros Avançados** - Por período, categoria, conta
+6. **Tags** - Sistema de tags para transações
+7. **Recorrências** - Lançamentos recorrentes automáticos
+8. **Multi-moeda** - Suporte a múltiplas moedas
+
+### Melhorias Técnicas
+1. **Testes** - Unit tests e E2E tests
+2. **PWA** - Progressive Web App com offline support
+3. **Dark Mode** - Tema escuro
+4. **i18n** - Internacionalização (EN, ES)
+5. **Otimizações** - Lazy loading, code splitting
+6. **Analytics** - Integração com Google Analytics
+
+## 👨‍💻 Desenvolvimento
+
+### Comandos Úteis
+
+```bash
+# Limpar porta 3000
+npm run clean-port
+
+# Ver logs PM2
+pm2 logs webapp --lines 50
+
+# Restart PM2
+pm2 restart webapp
+
+# Status PM2
+pm2 status
+
+# Deletar do PM2
+pm2 delete webapp
+
+# Build rápido
+npm run build
+
+# Test API
+npm test
+```
 
 ## 📄 Licença
 
-MIT License - Use como quiser! 🎉
+MIT License - Sinta-se livre para usar e modificar.
+
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas! Abra issues e pull requests.
 
 ---
 
-**Desenvolvido com ❤️ usando Hono + Cloudflare Workers + D1 + IA**
+**Desenvolvido com ❤️ usando Hono + Cloudflare Workers**
 
-**URL de Acesso**: https://3000-i8hjae221su2mndj8qpz9-dfc00ec5.sandbox.novita.ai
-
-**Versão**: 2.2.0 - Stable Release! 🚀✨
-
----
-
-## ✅ TODAS AS CORREÇÕES IMPLEMENTADAS - v2.2.0
-
-### 🐛 Problemas Críticos Corrigidos:
-
-#### 1. ✅ F5 NÃO DESLOGA MAIS!
-- Token persistente no localStorage
-- Axios configurado corretamente após reload
-- Mantém sessão até token expirar (7 dias)
-
-#### 2. ✅ Fluxo de Autenticação Correto
-**Antes**: Registro → Logado automaticamente (confuso)
-**Agora**: 
-1. **Registro** → Cria conta
-2. Redireciona para **Login**
-3. Faz primeiro login
-4. Entra no **Dashboard**
-5. **F5** → Mantém logado ✓
-
-#### 3. ✅ Validação de Senha Forte
-- Barra visual em tempo real
-- Níveis: Muito fraca → Fraca → Média → Forte
-- Feedback: "Adicione MAIÚSCULAS", "Adicione números"
-- Cores dinâmicas (vermelho → verde)
-- Validação antes de criar conta
-
-#### 4. ✅ Edição de Contas FUNCIONANDO
-- Corrigido erro `Type 'undefined' not supported`
-- Edita nome, saldo, limite, dias
-- Salvamento instantâneo
-
-#### 5. ✅ Edição de Transações FUNCIONANDO
-- Corrigido erro 500
-- Edita descrição, valor, categoria, data
-- Pode remover categoria (opcional)
-- Atualiza saldos corretamente
-
-### 🎯 Palavras-Chave Adicionadas:
-- **Alimentação**: +30 termos (rappi, uber eats, mcdonalds, sushi, etc)
-- **Mercado**: +15 termos (walmart, sams, feira, hortifruti, etc)
-- **Transporte**: +20 termos (99pop, cabify, posto, estacionamento, etc)
-- **Saúde**: +25 termos (drogaria, unimed, amil, genérico, etc)
-- **Moradia**: +20 termos (cemig, enel, sabesp, iptu, etc)
-- **E muito mais!**
-
-### 📋 Arquivo CSV de Exemplo:
-Incluído no projeto: `exemplo_importacao.csv`
-
-```csv
-date,description,amount,type,category,account
-2024-01-15,"Mercado Assaí",-320.50,expense,Mercado,Nubank
-2024-01-16,"iFood",-42.90,expense,Alimentação,Nubank
-2024-01-20,"Salário",8500,income,Salário,BB
-```
+**Última Atualização**: 06/11/2024
+**Versão**: 2.5.0
+**Status**: ✅ Produção Ready
