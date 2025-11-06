@@ -2,7 +2,7 @@
 
 import { Hono } from 'hono';
 import { Bindings } from '../types';
-import { hashPassword, verifyPassword, createToken } from '../utils/auth';
+import { hashPassword, verifyPassword, createToken, verifyToken } from '../utils/auth';
 import { JWT_SECRET } from '../middleware/auth';
 
 const auth = new Hono<{ Bindings: Bindings }>();
