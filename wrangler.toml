@@ -1,10 +1,9 @@
-name = "webapp"
-main = "src/index.tsx"
+name = "fermhubfinanceiro"
 compatibility_date = "2025-11-04"
 pages_build_output_dir = "./dist"
 compatibility_flags = ["nodejs_compat"]
 
 [[d1_databases]]
 binding = "DB"
-database_name = "webapp-production"
-database_id = "local-db"
+database_name = "fermhubfinanceiro-production"
+database_id = "11f2eaab-fcb3-4ed4-9246-994e69baf0cb"
