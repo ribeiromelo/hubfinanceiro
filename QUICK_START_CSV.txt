@@ -1,0 +1,120 @@
+═══════════════════════════════════════════════════════════════════════════
+🚀 QUICK START - IMPORTAÇÃO CSV - HUB FINANCEIRO PRO
+═══════════════════════════════════════════════════════════════════════════
+
+📋 CABEÇALHO OBRIGATÓRIO:
+date,description,amount,type,category,account
+
+═══════════════════════════════════════════════════════════════════════════
+
+🏷️ 10 CATEGORIAS VÁLIDAS (copie exatamente):
+
+DESPESAS:
+✓ Alimentação
+✓ Mercado
+✓ Transporte
+✓ Saúde
+✓ Lazer
+✓ Educação
+✓ Moradia
+✓ Assinaturas
+✓ Outros
+
+RECEITAS:
+✓ Salário
+
+═══════════════════════════════════════════════════════════════════════════
+
+📝 FORMATO DE LINHA:
+
+2024-03-15,"Descrição aqui",235.50,expense,"Mercado","Nubank"
+    ↓           ↓          ↓       ↓         ↓         ↓
+  Data    Descrição   Valor   Tipo   Categoria    Conta
+           (aspas)   (ponto)                      (exata)
+
+═══════════════════════════════════════════════════════════════════════════
+
+✅ REGRAS SIMPLES:
+
+1. Data: YYYY-MM-DD (ex: 2024-03-15)
+2. Valor: sempre positivo, ponto decimal (ex: 125.50)
+3. Tipo: expense (saída) ou income (entrada)
+4. Categoria: escolha 1 das 10 acima
+5. Conta: use nome EXATO que você criou no sistema
+
+═══════════════════════════════════════════════════════════════════════════
+
+⚠️ ANTES DE IMPORTAR:
+
+1. Acesse: https://fermhubfinanceiro.pages.dev/principal
+2. Crie suas contas:
+   • Clique "+ Nova Conta"
+   • Ex: "Nubank", "Carteira", "Cartão de Crédito"
+3. Anote os nomes EXATOS das contas
+
+═══════════════════════════════════════════════════════════════════════════
+
+📊 EXEMPLO COMPLETO:
+
+date,description,amount,type,category,account
+2024-03-01,"Salário Março",6500,income,"Salário","Nubank"
+2024-03-02,"Aluguel",2200,expense,"Moradia","Nubank"
+2024-03-03,"Mercado",680.50,expense,"Mercado","Nubank"
+2024-03-05,"Uber",18.50,expense,"Transporte","Carteira"
+2024-03-05,"Netflix",55.90,expense,"Assinaturas","Cartão de Crédito"
+2024-03-08,"Cinema",65,expense,"Lazer","Carteira"
+
+═══════════════════════════════════════════════════════════════════════════
+
+🤖 COPIE ESTE PROMPT PARA OUTRA IA GERAR SEU CSV:
+
+"Gere um arquivo CSV de transações financeiras com este cabeçalho EXATO:
+
+date,description,amount,type,category,account
+
+Regras obrigatórias:
+- date: formato YYYY-MM-DD (ex: 2024-03-15)
+- amount: sempre positivo, ponto decimal (ex: 125.50)
+- type: 'expense' para despesas, 'income' para receitas
+- category: use APENAS uma destas 10 categorias:
+  Alimentação, Mercado, Transporte, Saúde, Lazer, Educação, Moradia, Assinaturas, Salário, Outros
+- account: use apenas estes nomes: 'Nubank', 'Carteira', 'Cartão de Crédito'
+
+Gere 30 transações brasileiras realistas para março de 2024, 
+perfil classe média, incluindo:
+- 1 salário no início (R$ 5000-7000)
+- Despesas típicas: mercado, transporte, contas, lazer
+- Valores em reais
+
+Retorne APENAS o CSV, sem explicações."
+
+═══════════════════════════════════════════════════════════════════════════
+
+❌ ERROS COMUNS A EVITAR:
+
+✗ Data brasileira (15/03/2024)     → Use: 2024-03-15
+✗ Valor negativo (-150.50)         → Use: 150.50 (e type=expense)
+✗ Vírgula decimal (150,50)         → Use: 150.50 (ponto)
+✗ Categoria "Compras"              → Use: "Mercado" ou "Outros"
+✗ Conta "meu banco"                → Use nome EXATO: "Nubank"
+
+═══════════════════════════════════════════════════════════════════════════
+
+📚 DOCUMENTAÇÃO COMPLETA:
+
+Leia os arquivos:
+• GUIA_IMPORTACAO_CSV.md (guia completo detalhado)
+• PROMPT_PARA_IA.md (prompt completo para IA)
+• exemplo_csv_completo.csv (20 transações de exemplo)
+• RESUMO_CSV.md (resumo executivo)
+
+═══════════════════════════════════════════════════════════════════════════
+
+🌐 SISTEMA ONLINE:
+
+Dashboard: https://fermhubfinanceiro.pages.dev/principal
+GitHub: https://github.com/ribeiromelo/hubfinanceiro
+
+Versão: v2.5.0 | Data: 06/11/2024
+
+═══════════════════════════════════════════════════════════════════════════
